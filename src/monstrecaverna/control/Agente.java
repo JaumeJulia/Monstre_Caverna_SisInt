@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package robot.control;
+package monstrecaverna.control;
 
 import java.util.Random;
-import robot.modelo.Direcciones;
-import robot.vista.Vista;
+import monstrecaverna.modelo.Direcciones;
+import monstrecaverna.vista.Vista;
 
 /**
  *

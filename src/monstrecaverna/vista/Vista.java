@@ -1,4 +1,4 @@
-package robot.vista;
+package monstrecaverna.vista;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -27,9 +27,9 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import robot.control.Agente;
-import robot.control.Control;
-import robot.modelo.Direcciones;
+import monstrecaverna.control.Agente;
+import monstrecaverna.control.Control;
+import monstrecaverna.modelo.Direcciones;
 
 /**
  *
