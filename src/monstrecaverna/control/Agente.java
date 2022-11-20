@@ -83,8 +83,27 @@ public class Agente {
             }
             rotar(rotacion);
         }
+        
+        posicionActual[0] += direcciones[direccionActual].X;
+        posicionActual[1] += direcciones[direccionActual].Y;
+        memoria.recuerda(posicionActual, inversorDireccion(direcciones[direccionActual]));
         System.out.println("Me dirijo al:" + direcciones[direccionActual].toString());
         return direcciones[direccionActual];
+    }
+    
+    private Direcciones inversorDireccion(Direcciones direccion){
+        switch(direccion){
+            case ESTE:
+                return Direcciones.OESTE;
+            case NORTE:
+                return Direcciones.SUR;
+            case OESTE:
+                return Direcciones.ESTE;
+            case SUR:
+                return Direcciones.NORTE;
+            default:
+                return direccion;
+        }
     }
     
     public void rotar(int sentido){
