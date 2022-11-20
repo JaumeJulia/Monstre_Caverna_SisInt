@@ -15,7 +15,7 @@ public class Casilla {
     private int nivelBrisa;
     private boolean pared;
     
-    Casilla antecesora; //permitirá al agente recular hasta la entrada
+    Direcciones antecesora; //permitirá al agente recular hasta la entrada
     
     public Casilla(){
         segura = false;
@@ -40,7 +40,7 @@ public class Casilla {
     }
 
     public void incrementaNivelHedor() {
-        if(!isSegura()){
+        if(!isSegura() && nivelHedor < 4){
             this.nivelHedor += 1;
         }
     }
@@ -50,7 +50,7 @@ public class Casilla {
     }
 
     public void incrementaNivelBrisa() {
-        if(!isSegura()){
+        if(!isSegura() && nivelBrisa < 4){
             this.nivelBrisa += 1;
         }
     }
@@ -63,11 +63,11 @@ public class Casilla {
         this.pared = pared;
     }
 
-    public Casilla getAntecesora() {
+    public Direcciones getAntecesora() {
         return antecesora;
     }
 
-    public void setAntecesora(Casilla antecesora) {
+    public void setAntecesora(Direcciones antecesora) {
         this.antecesora = antecesora;
     }    
 }
