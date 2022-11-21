@@ -4,7 +4,13 @@
  */
 package monstrecaverna.vista;
 
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -13,7 +19,8 @@ import java.awt.Rectangle;
 public class Cuadro {
 
     Rectangle rectangulo;
-    private boolean pared, agente, centinela;
+    private boolean pared, agente, centinela, hedor, brisa, resplandor, abismo, monstruo;
+    private Image imagen;
 
     public Cuadro(int x, int y, int w, int h, boolean p, boolean a, boolean c) {
         this.rectangulo = new Rectangle(x, y, w, h);
@@ -25,33 +32,105 @@ public class Cuadro {
     public void setPared(boolean p) {
         this.pared = p;
     }
-    
-    public void setAgente(boolean a) {
+
+    public void setAgente(boolean a, String directorioImagen) {
         this.agente = a;
+        if (a) {
+            try {
+                this.imagen = ImageIO.read(new File(directorioImagen));
+            } catch (IOException ex) {
+                Logger.getLogger(Cuadro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
-    
+
     public void setCentinela(boolean c) {
         this.centinela = c;
     }
 
     public void setWidth(int w) {
-        this.rectangulo.setRect(this.rectangulo.getX(),  this.rectangulo.getY(), w,  this.rectangulo.getHeight());
-   }
+        this.rectangulo.setRect(this.rectangulo.getX(), this.rectangulo.getY(), w, this.rectangulo.getHeight());
+    }
 
     public void setHeight(int h) {
-        this.rectangulo.setRect(this.rectangulo.getX(),  this.rectangulo.getY(), this.rectangulo.getWidth(), h);
+        this.rectangulo.setRect(this.rectangulo.getX(), this.rectangulo.getY(), this.rectangulo.getWidth(), h);
     }
-    
+
     public boolean isPared() {
         return this.pared;
     }
-    
+
     public boolean isAgente() {
         return this.agente;
     }
-    
+
     public boolean isCentinela() {
         return this.centinela;
+    }
+
+    public void setHedor(boolean h) {
+        this.hedor = h;
+    }
+
+    public void setBrisa(boolean s) {
+        this.brisa = s;
+    }
+
+    public void setResplandor(boolean t) {
+        this.resplandor = t;
+        if (t) {
+            try {
+                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/tesoro.png"));
+            } catch (IOException ex) {
+                Logger.getLogger(Cuadro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void setAbismo(boolean a) {
+        this.abismo = a;
+        if (a) {
+            try {
+                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/abismo.png"));
+            } catch (IOException ex) {
+                Logger.getLogger(Cuadro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void setMonstruo(boolean m) {
+        this.monstruo = m;
+        if (m) {
+            try {
+                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/monstruo.png"));
+            } catch (IOException ex) {
+                Logger.getLogger(Cuadro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void setImagen (Image img){
+        this.imagen = img;
+    }
+    
+    public boolean[] getEstado() {
+        return new boolean[]{this.hedor, this.brisa, this.resplandor};
+    }
+
+    public boolean isMonstruo() {
+        return this.monstruo;
+    }
+
+    public boolean isAbismo() {
+        return this.abismo;
+    }
+
+    public boolean isTesoro() {
+        return this.resplandor;
+    }
+
+    public Image getImagen() {
+        return this.imagen;
     }
 
     public int getX() {
@@ -61,12 +140,12 @@ public class Cuadro {
     public int getY() {
         return (int) this.rectangulo.getY();
     }
-    
-    public int getWidth(){
+
+    public int getWidth() {
         return (int) this.rectangulo.getWidth();
     }
-    
-    public int getHeight(){
+
+    public int getHeight() {
         return (int) this.rectangulo.getHeight();
     }
 
@@ -99,4 +178,4 @@ public class Cuadro {
             
             @Override
             public boolean isEmpty() {return false;}
-*/
+ */

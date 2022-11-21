@@ -66,7 +66,7 @@ public class Agente {
     }
     
     public Direcciones moverAgente(){
-        estadoCasillaActual = vista.getCasilla(posicionActual).estado(); //esto deberia devolver el array de booleanas que dice si hay hedor, brisa o resplandor
+        estadoCasillaActual = vista.getCasilla(posicionActual).getEstado(); //esto deberia devolver el array de booleanas que dice si hay hedor, brisa o resplandor
         if(saliendo){
             return memoria.getCasilla(posicionActual).getAntecesora();//se dirige a la casilla antecesora
         }
