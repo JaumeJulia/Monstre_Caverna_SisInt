@@ -10,10 +10,10 @@ package monstrecaverna.modelo;
  * @author Daxmaster
  */
 public enum Direcciones {
-    NORTE(0, -1, "src/robot/modelo/amogus_NORTE.png"),
-    SUR(0, 1, "src/robot/modelo/amogus_SUR.png"),
-    ESTE(1, 0, "src/robot/modelo/amogus_ESTE.png"),
-    OESTE(-1, 0, "src/robot/modelo/amogus_OESTE.png");
+    NORTE(0, -1, "src/monsrtecaverna/modelo/amogus_NORTE.png"),
+    SUR(0, 1, "src/monsrtecaverna/modelo/amogus_SUR.png"),
+    ESTE(1, 0, "src/monsrtecaverna/modelo/amogus_ESTE.png"),
+    OESTE(-1, 0, "src/monsrtecaverna/modelo/amogus_OESTE.png");
     
     public final int X;
     public final int Y;

@@ -5,17 +5,32 @@
  */
 package monstrecaverna;
 
+import monstrecaverna.control.Control;
+import monstrecaverna.vista.Vista;
+
 /**
  *
  * @author Daxmaster
  */
 public class MonstreCaverna {
+    
+    private Control control;
+    private Vista vista;
+    
+    public MonstreCaverna(){
+        this.control = new Control();
+        this.vista = new Vista("Cueva del monstruo", control);
+        control.setVista(vista);
+        
+        this.vista.mostrar();
+        
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        MonstreCaverna m = new MonstreCaverna();
     }
     
 }

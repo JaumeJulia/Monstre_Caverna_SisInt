@@ -8,11 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import monstrecaverna.control.Agente;
 
 /**
  *
@@ -32,18 +28,29 @@ public class Recinto extends JPanel implements MouseListener {
         super.paintComponent(g);
         g.setColor(Color.WHITE);
         g.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
-        g.setColor(Color.BLACK);
         for (int i = 0; i < vista.sliderTamañoRecinto.getValue() + 2; i++) {
             for (int j = 0; j < vista.sliderTamañoRecinto.getValue() + 2; j++) {
                 int x = vista.matrizCuadros[i][j].getX(), y = vista.matrizCuadros[i][j].getY(),
                         w = vista.matrizCuadros[i][j].getWidth(), h = vista.matrizCuadros[i][j].getHeight();
+                g.setColor(Color.WHITE);
+                g.fillRect(x, y, w, h);
+                g.setColor(Color.BLACK);
                 g.drawRect(x, y, w, h);
+
                 if (vista.matrizCuadros[i][j].isPared()) {
+                    g.setColor(Color.BLACK);
                     g.fillRect(x, y, w, h);
                 }
-                if (vista.matrizCuadros[i][j].isAgente()) {
-
-                    g.drawImage(vista.imagen, x, y, w, h, this);
+                if (vista.matrizCuadros[i][j].isAgente() || vista.matrizCuadros[i][j].isAbismo()
+                        || vista.matrizCuadros[i][j].isMonstruo() || vista.matrizCuadros[i][j].isTesoro()) {
+                    System.out.println("Imagen en la casilla ["+i+"]["+j+"]:"+vista.matrizCuadros[i][j].getImagen());
+                    System.out.println("Estado de la casilla ["+i+"]["+j+"]: "
+                            + "\nAgente -> "+vista.matrizCuadros[i][j].isAgente()
+                    + "\nAbismo -> "+vista.matrizCuadros[i][j].isAbismo()
+                    + "\nMonstruo -> "+vista.matrizCuadros[i][j].isMonstruo()
+                    + "\nTesoro -> "+vista.matrizCuadros[i][j].isTesoro());
+                    System.out.println("Posicion absoluta de la casilla["+i+"]["+j+"]:" +vista.matrizCuadros[i][j].getX()+","+vista.matrizCuadros[i][j].getY());
+                    g.drawImage(vista.matrizCuadros[i][j].getImagen(), x, y, w, h, this);
                 }
             }
         }
@@ -86,25 +93,42 @@ public class Recinto extends JPanel implements MouseListener {
                 }
             }
 
-            if (vista.agente == true && vista.matrizCuadros[j][i].isPared() == false) {
-                vista.matrizCuadros[vista.posicionAgente[0]][vista.posicionAgente[1]].setAgente(false);
-                vista.matrizCuadros[j][i].setAgente(true);
-                vista.posicionAgente[0] = j;
-                vista.posicionAgente[1] = i;
-                Agente robot = new Agente(vista.posicionAgente, 1, vista);
-                vista.control.setAgente(robot);
-                try {
-                    vista.imagen = ImageIO.read(new File("src/robot/modelo/amogus_OESTE.png"));
-                } catch (IOException ex) {
-                    System.out.println("Error de imagen");
-                }
-                vista.agente = false;
-            } else if (vista.agente == false && vista.matrizCuadros[j][i].isAgente() == false) {
-                if (vista.matrizCuadros[j][i].isPared() == false) {
-                    vista.matrizCuadros[j][i].setPared(true);
-                } else if (vista.matrizCuadros[j][i].isCentinela() == false) {
-                    vista.matrizCuadros[j][i].setPared(false);
-                }
+            if (vista.posicionarAbismo.isSelected() == true && vista.matrizCuadros[j][i].isAbismo() == true) {
+                System.out.println("Aqui");
+                vista.matrizCuadros[j][i].setAbismo(false);
+                vista.matrizCuadros[j + 1][i].setBrisa(false);
+                vista.matrizCuadros[j][i + 1].setBrisa(false);
+                vista.matrizCuadros[j - 1][i].setBrisa(false);
+                vista.matrizCuadros[j][i - 1].setBrisa(false);
+
+            } else if (vista.posicionarAbismo.isSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == false
+                    && vista.matrizCuadros[j][i].isTesoro() == false && vista.matrizCuadros[j][i].isAgente() == false) {
+                vista.matrizCuadros[j][i].setAbismo(true);
+                vista.matrizCuadros[j + 1][i].setBrisa(true);
+                vista.matrizCuadros[j][i + 1].setBrisa(true);
+                vista.matrizCuadros[j - 1][i].setBrisa(true);
+                vista.matrizCuadros[j][i - 1].setBrisa(true);
+
+            } else if (vista.posicionarMonstruo.isSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == true) {
+                vista.matrizCuadros[j][i].setMonstruo(false);
+                vista.matrizCuadros[j + 1][i].setHedor(false);
+                vista.matrizCuadros[j][i + 1].setHedor(false);
+                vista.matrizCuadros[j - 1][i].setHedor(false);
+                vista.matrizCuadros[j][i - 1].setHedor(false);
+
+            } else if (vista.posicionarMonstruo.isSelected() == true && vista.matrizCuadros[j][i].isAbismo() == false
+                    && vista.matrizCuadros[j][i].isTesoro() == false && vista.matrizCuadros[j][i].isAgente() == false) {
+                vista.matrizCuadros[j][i].setMonstruo(true);
+                vista.matrizCuadros[j + 1][i].setHedor(true);
+                vista.matrizCuadros[j][i + 1].setHedor(true);
+                vista.matrizCuadros[j - 1][i].setHedor(true);
+                vista.matrizCuadros[j][i - 1].setHedor(true);
+
+            } else if (vista.posicionarTesoro.isSelected() == true && vista.matrizCuadros[j][i].isTesoro() == true) {
+                vista.matrizCuadros[j][i].setResplandor(false);
+            } else if (vista.posicionarTesoro.isSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == false
+                    && vista.matrizCuadros[j][i].isAbismo() == false && vista.matrizCuadros[j][i].isAgente() == false) {
+                vista.matrizCuadros[j][i].setResplandor(true);
             }
             repaint();
         } catch (Exception outOfBounds) {
