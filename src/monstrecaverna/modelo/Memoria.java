@@ -49,6 +49,7 @@ public class Memoria {
     }
     
     public void recuerda(int[] posicionActual, Direcciones direccion){ //Recuerda el camino SEGURO de vuelta
+        System.out.println("La antecesora de " + Arrays.toString(posicionActual) + "Se encuentra hacia el " + direccion.toString());
         Casilla casillaOcupada = getCasilla(posicionActual);
         casillaOcupada.setAntecesora(direccion);
     }

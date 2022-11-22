@@ -72,10 +72,17 @@ public class Agente {
     public Direcciones moverAgente(){
         System.out.println("------------------------ MOVIMIENTO AGENTE ------------------------");
         memoria.getCasilla(posicionActual).visitada();
+        
         System.out.println("comprobacion de que se ha guardado: " + memoria.getCasilla(posicionActual).getVisitada());
         estadoCasillaActual = vista.getCasilla(posicionActual).getEstado(); //esto deberia devolver el array de booleanas que dice si hay hedor, brisa o resplandor
         if(saliendo){
-            return memoria.getCasilla(posicionActual).getAntecesora();//se dirige a la casilla antecesora
+            if(posicionActual[0] == 0 && posicionActual[1] == 0){
+                return null;
+            }
+            Direcciones direccion = memoria.getCasilla(posicionActual).getAntecesora();
+            posicionActual[0] += direccion.X;
+            posicionActual[1] += direccion.Y;
+            return direccion;//se dirige a la casilla antecesora
         }
         if(estadoCasillaActual[2]){
             //coge el tesoro
