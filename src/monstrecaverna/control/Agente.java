@@ -34,15 +34,9 @@ public class Agente {
         this.rotacion = rotacion;
         posicionActual[0] = 0;
         posicionActual[1] = 0;
-        pene();
         memoria = new Memoria(posicionActual);
-        pene();
         this.vista = vista;
         saliendo = false;
-    }
-    
-    public void pene(){
-        System.out.println("wtf!!!!! " + Arrays.toString(posicionActual));
     }
     
     private Casilla[] reconocerEntorno(){
@@ -56,6 +50,7 @@ public class Agente {
             int[] casillaCercana = {posicionActual[0] + direcciones[direccionActual].X, posicionActual[1] + direcciones[direccionActual].Y};
             System.out.println("Investigo la casilla " + Arrays.toString(casillaCercana));
             if(vista.getCasilla(casillaCercana).isPared()){
+                System.out.println("PARED!");
                 entorno[i].setPared(true);
             }
             rotar(rotacion);
@@ -87,6 +82,8 @@ public class Agente {
         
         rotar(-rotacion);
         for(Casilla casilla: entorno){ //al salir del for, la rotación dará como resultado que el agente mire hacia atrás, siendo este el movimiento por defecto incluso cuando todo falla. 
+            System.out.println("es una pared? " + casilla.isPared());
+            System.out.println("es segura? " + casilla.isSegura());
             if(casilla.isSegura() && !casilla.isPared()){
                 break;
             }

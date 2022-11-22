@@ -434,6 +434,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                     matrizCuadros[1][1].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
                     posicionInicialAgente[0] = 1;
                     posicionInicialAgente[1] = 1;
+                    posicionAgente[0] = 1;
+                    posicionAgente[1] = 1;
                     Agente ag = new Agente(1, this);
                     control.setAgente(ag);
             }
