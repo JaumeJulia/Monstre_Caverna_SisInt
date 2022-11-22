@@ -16,6 +16,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -32,6 +33,7 @@ import javax.swing.event.ChangeListener;
 import monstrecaverna.control.Agente;
 import monstrecaverna.control.Control;
 import monstrecaverna.modelo.Direcciones;
+import monstrecaverna.modelo.PosicionInicialAgente;
 
 /**
  *
@@ -60,7 +62,9 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     private JToggleButton iniciar;
     boolean abismo = false, monstruo = false, tesoro = false;
     private int cantidadAgentes = 0, cantidadTesoro = 0;
-    int posicionAgente[] = new int[2];
+    private int posicionAgente[] = new int[2];
+    private PosicionInicialAgente posicionesInicialesAgentes[] = new PosicionInicialAgente[4];
+    private int posicionInicialAgente[] = new int[2];
     private final JLabel tamañoRecintoLabel = new JLabel("Tamaño del recinto: ");
     private JTextField tamañoRecintoText = new JTextField();
     private final JLabel cantidadAgente = new JLabel("Agentes en la cueva: ");
@@ -320,7 +324,9 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
     //METODO QUE DEVUELVE EL CUADRO INDICADO POR a[]
     public Cuadro getCasilla(int[] a) {
-        return matrizCuadros[a[0]][a[1]];
+        int resultadoAbsoluto[] = {a[0] + posicionInicialAgente[0],a[1] + posicionInicialAgente[1]}; 
+        System.out.println("Resultado absoluto: " + Arrays.toString(resultadoAbsoluto));
+        return matrizCuadros[a[0] + posicionInicialAgente[0]][a[1] + posicionInicialAgente[1]];
     }
 
     @Override
@@ -426,6 +432,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                     matrizCuadros[1][matrizCuadros[1].length - 2].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
                 case 1:
                     matrizCuadros[1][1].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
+                    posicionInicialAgente[0] = 1;
+                    posicionInicialAgente[1] = 1;
                     Agente ag = new Agente(1, this);
                     control.setAgente(ag);
             }

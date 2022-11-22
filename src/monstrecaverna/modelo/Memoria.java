@@ -5,6 +5,7 @@
  */
 package monstrecaverna.modelo;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -53,7 +54,7 @@ public class Memoria {
     }
     
     public Casilla getCasilla(int[] posicion, Direcciones direccion){ //Para mirar las casillas cercanas
-        int[] aux = posicion;
+        int[] aux = {posicion[0], posicion[1]};
         aux[0] += direccion.X;
         aux[1] += direccion.Y;
         return getCasilla(aux);     
@@ -74,6 +75,7 @@ public class Memoria {
     }
     
     private Casilla ampliaMemoria(int[] posicion){
+        System.out.println("la posicion llega como " + Arrays.toString(posicion));
         HashMap<Integer, Casilla> memoriaAux = new HashMap<>();
         Casilla casilla = new Casilla();
         memoriaAux.put(posicion[1], casilla);

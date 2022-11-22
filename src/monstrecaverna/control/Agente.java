@@ -5,6 +5,7 @@
  */
 package monstrecaverna.control;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import monstrecaverna.modelo.Casilla;
@@ -33,9 +34,15 @@ public class Agente {
         this.rotacion = rotacion;
         posicionActual[0] = 0;
         posicionActual[1] = 0;
+        pene();
         memoria = new Memoria(posicionActual);
+        pene();
         this.vista = vista;
         saliendo = false;
+    }
+    
+    public void pene(){
+        System.out.println("wtf!!!!! " + Arrays.toString(posicionActual));
     }
     
     private Casilla[] reconocerEntorno(){
@@ -45,7 +52,9 @@ public class Agente {
         for(int i = 0 ; i < 4 ; i++){
             System.out.println("Miro al:" + direcciones[direccionActual].toString());
             entorno[i] = memoria.getCasilla(posicionActual, direcciones[direccionActual]);
+            System.out.println("Posicion actual del agente: " + Arrays.toString(posicionActual));
             int[] casillaCercana = {posicionActual[0] + direcciones[direccionActual].X, posicionActual[1] + direcciones[direccionActual].Y};
+            System.out.println("Investigo la casilla " + Arrays.toString(casillaCercana));
             if(vista.getCasilla(casillaCercana).isPared()){
                 entorno[i].setPared(true);
             }
