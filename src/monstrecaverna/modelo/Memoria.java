@@ -28,12 +28,20 @@ public class Memoria {
         } else {
             if(estado[1]){ //En la casilla ocupada se percibe un HEDOR
                 for(Casilla casilla : entorno){
-                    casilla.incrementaNivelHedor();
+                    if(casilla.getNivelBrisa() == 0){
+                        casilla.incrementaNivelHedor();
+                    } else {
+                        casilla.setSegura();
+                    }
                 }
             }
             if(estado[2]){ //En la casilla ocupada se percibe BRISA
                 for(Casilla casilla : entorno){
-                    casilla.incrementaNivelBrisa();
+                    if(casilla.getNivelHedor()== 0){
+                        casilla.incrementaNivelBrisa();
+                    } else {
+                        casilla.setSegura();
+                    }
                 }
             }
         }
