@@ -61,21 +61,26 @@ public class Memoria {
     }
     
     public Casilla getCasilla(int[] posicion){ //Para mirar la casilla ocupada
+        System.out.println("Recordando la casilla " + Arrays.toString(posicion));
         HashMap <Integer, Casilla> memoriaAux = memoria.get(posicion[0]);
         Casilla casilla;
         if(memoriaAux != null){
+            System.out.println("Existe");
             casilla = memoriaAux.get(posicion[1]);
             if(casilla == null){
-                casilla = ampliaMemoria(posicion);
+                System.out.println("No existe");
+                casilla = new Casilla();
+                memoriaAux.put(posicion[1], casilla);
+                //casilla = ampliaMemoria(posicion);
             }
         } else {
+            System.out.println("No existe");
             casilla = ampliaMemoria(posicion);
         }
         return casilla;
     }
     
     private Casilla ampliaMemoria(int[] posicion){
-        System.out.println("la posicion llega como " + Arrays.toString(posicion));
         HashMap<Integer, Casilla> memoriaAux = new HashMap<>();
         Casilla casilla = new Casilla();
         memoriaAux.put(posicion[1], casilla);

@@ -70,6 +70,9 @@ public class Agente {
     }
     
     public Direcciones moverAgente(){
+        System.out.println("------------------------ MOVIMIENTO AGENTE ------------------------");
+        memoria.getCasilla(posicionActual).visitada();
+        System.out.println("comprobacion de que se ha guardado: " + memoria.getCasilla(posicionActual).getVisitada());
         estadoCasillaActual = vista.getCasilla(posicionActual).getEstado(); //esto deberia devolver el array de booleanas que dice si hay hedor, brisa o resplandor
         if(saliendo){
             return memoria.getCasilla(posicionActual).getAntecesora();//se dirige a la casilla antecesora
@@ -80,20 +83,28 @@ public class Agente {
         }
         Casilla[] entorno = reconocerEntorno();
         
+        int visitaCasillaSeleccionada = 999;
+        int marcadorDireccion = direccionActual;
         rotar(-rotacion);
+        System.out.println("Estoy mirando la casilla del " + direcciones[direccionActual]);
         for(Casilla casilla: entorno){ //al salir del for, la rotación dará como resultado que el agente mire hacia atrás, siendo este el movimiento por defecto incluso cuando todo falla. 
             System.out.println("es una pared? " + casilla.isPared());
             System.out.println("es segura? " + casilla.isSegura());
-            if(casilla.isSegura() && !casilla.isPared()){
-                break;
+            System.out.println("Cuantas veces ha sido visitada? " + casilla.getVisitada());
+            if(casilla.isSegura() && !casilla.isPared() && casilla.getVisitada() < visitaCasillaSeleccionada){
+                visitaCasillaSeleccionada = casilla.getVisitada();
+                marcadorDireccion = direccionActual;
             }
             rotar(rotacion);
         }
+        
+        direccionActual = marcadorDireccion;
         
         posicionActual[0] += direcciones[direccionActual].X;
         posicionActual[1] += direcciones[direccionActual].Y;
         memoria.recuerda(posicionActual, inversorDireccion(direcciones[direccionActual]));
         System.out.println("Me dirijo al:" + direcciones[direccionActual].toString());
+        System.out.println("------------------------ LISTO! ------------------------");
         return direcciones[direccionActual];
     }
     

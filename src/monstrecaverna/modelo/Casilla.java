@@ -14,6 +14,7 @@ public class Casilla {
     private int nivelHedor;
     private int nivelBrisa;
     private boolean pared;
+    private int visitada;
     
     Direcciones antecesora; //permitirá al agente recular hasta la entrada
     
@@ -23,6 +24,7 @@ public class Casilla {
         nivelBrisa = 0;
         pared = false;
         antecesora = null;
+        visitada = 0;
     }
 
     public boolean isSegura() {
@@ -69,5 +71,13 @@ public class Casilla {
 
     public void setAntecesora(Direcciones antecesora) {
         this.antecesora = antecesora;
-    }    
+    }
+
+    public void visitada(){
+        visitada += 1;
+    }
+    
+    public int getVisitada(){
+        return visitada;
+    }
 }
