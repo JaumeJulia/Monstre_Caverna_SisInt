@@ -17,6 +17,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -274,17 +276,25 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     }
 
     public void moverAgente(Direcciones direccion) {
-        directorioImagen = direccion.LINKFOTO;
-        try {
-            imagen = ImageIO.read(new File(directorioImagen));
-        } catch (IOException ex) {
-            System.out.println("Error de imagen");
+        directorioImagen = direccion.LINKFOTO;          
+        
+        matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(false, "");
+        if(matrizCuadros[posicionAgente[0]][posicionAgente[1]].isBrisa()){
+            matrizCuadros[posicionAgente[0]][posicionAgente[1]].setBrisa(true);
+        }else if(matrizCuadros[posicionAgente[0]][posicionAgente[1]].isHedor()){
+            matrizCuadros[posicionAgente[0]][posicionAgente[1]].setHedor(true);
+        }else if(matrizCuadros[posicionAgente[0]][posicionAgente[1]].isTesoro()){
+            matrizCuadros[posicionAgente[0]][posicionAgente[1]].setResplandor(false);
         }
-        matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(false, directorioImagen);
         posicionAgente[0] += direccion.X;
         posicionAgente[1] += direccion.Y;
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(true, directorioImagen);
         repaint();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     //LISTENER PARA EL SLIDER
@@ -372,29 +382,14 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                 matrizCuadros[j][i + 1].setBrisa(true);
                 matrizCuadros[j - 1][i].setBrisa(true);
                 matrizCuadros[j][i - 1].setBrisa(true);
-                try {
-                    imagen = ImageIO.read(new File("src/monstrecaverna/modelo/abismo.png"));
-                } catch (IOException ex) {
-                    System.out.println("Error de imagen");
-                }
             } else if (posicionarMonstruo.isSelected() == true && matrizCuadros[j][i].isPared() == false) {
                 matrizCuadros[j][i].setMonstruo(true);
                 matrizCuadros[j + 1][i].setHedor(true);
                 matrizCuadros[j][i + 1].setHedor(true);
                 matrizCuadros[j - 1][i].setHedor(true);
                 matrizCuadros[j][i - 1].setHedor(true);
-                try {
-                    imagen = ImageIO.read(new File("src/monstrecaverna/modelo/monstruo.png"));
-                } catch (IOException ex) {
-                    System.out.println("Error de imagen");
-                }
             } else if (posicionarTesoro.isSelected() == true && matrizCuadros[j][i].isPared() == false) {
                 matrizCuadros[j][i].setResplandor(true);
-                try {
-                    imagen = ImageIO.read(new File("src/monstrecaverna/modelo/tesoro.png"));
-                } catch (IOException ex) {
-                    System.out.println("Error de imagen");
-                }
             }
             repaint();
         } catch (Exception outOfBounds) {

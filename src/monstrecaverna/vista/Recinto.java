@@ -42,7 +42,8 @@ public class Recinto extends JPanel implements MouseListener {
                     g.fillRect(x, y, w, h);
                 }
                 if (vista.matrizCuadros[i][j].isAgente() || vista.matrizCuadros[i][j].isAbismo()
-                        || vista.matrizCuadros[i][j].isMonstruo() || vista.matrizCuadros[i][j].isTesoro()) {
+                        || vista.matrizCuadros[i][j].isMonstruo() || vista.matrizCuadros[i][j].isTesoro()
+                        || vista.matrizCuadros[i][j].isBrisa() || vista.matrizCuadros[i][j].isHedor()) {
                     System.out.println("Imagen en la casilla ["+i+"]["+j+"]:"+vista.matrizCuadros[i][j].getImagen());
                     System.out.println("Estado de la casilla ["+i+"]["+j+"]: "
                             + "\nAgente -> "+vista.matrizCuadros[i][j].isAgente()

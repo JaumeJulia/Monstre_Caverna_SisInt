@@ -70,10 +70,24 @@ public class Cuadro {
 
     public void setHedor(boolean h) {
         this.hedor = h;
+        if (h) {
+            try {
+                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/hedor.png"));
+            } catch (IOException ex) {
+                Logger.getLogger(Cuadro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public void setBrisa(boolean s) {
         this.brisa = s;
+        if (s) {
+            try {
+                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/brisa.png"));
+            } catch (IOException ex) {
+                Logger.getLogger(Cuadro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public void setResplandor(boolean t) {
@@ -117,6 +131,14 @@ public class Cuadro {
         return new boolean[]{this.hedor, this.brisa, this.resplandor};
     }
 
+    public boolean isBrisa() {
+        return this.brisa;
+    }
+
+    public boolean isHedor() {
+        return this.hedor;
+    }
+    
     public boolean isMonstruo() {
         return this.monstruo;
     }
