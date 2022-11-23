@@ -2,9 +2,11 @@ package monstrecaverna.vista;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -14,14 +16,13 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,7 +42,7 @@ import monstrecaverna.modelo.PosicionInicialAgente;
  *
  * @author bertu
  */
-public class Vista extends JFrame implements ChangeListener, ComponentListener, MouseListener, ActionListener {
+public class Vista extends JFrame implements ChangeListener, ComponentListener, ItemListener {
 
     Control control;
 
@@ -58,20 +59,31 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     private final Recinto recinto;
     private final JPanel opciones = new JPanel();
 
-    JRadioButton posicionarAbismo, posicionarMonstruo, posicionarTesoro;
+    //Opciones de tamaño del recinto
+    private final JPanel opcionesRecinto = new JPanel();
+    private final JLabel tamañoRecintoLabel = new JLabel("Tamaño del recinto: ");
+    private JTextField tamañoRecintoText = new JTextField();
+    final JSlider sliderTamañoRecinto = new JSlider(JSlider.HORIZONTAL, 5, 20, 10);
+
+    //Opciones para añadir obstaculos o tesoros
+    private final JPanel opcionesObstaculo = new JPanel();
+    RadioButtonConImagen posicionarAbismo, posicionarMonstruo, posicionarTesoro;
+    private JLabel imagenAbismo, imagenMonstruo, imagenTesoro;
     private ButtonGroup grupoBotones;
-    private JButton posicionarAgente;
+
+    //Opciones de inicio para los agentes
+    private final JPanel opcionesAgente = new JPanel();
+    private JLabel cantidadAgente;
+    private JTextField cantidadAgenteText;
+    final JSlider sliderCantidadAgentes = new JSlider(JSlider.HORIZONTAL, 1, 4, 1);
     private JToggleButton iniciar;
+
+    //Información general de la vista
     boolean abismo = false, monstruo = false, tesoro = false;
     private int cantidadAgentes = 0, cantidadTesoro = 0;
     private int posicionAgente[] = new int[2];
     private PosicionInicialAgente posicionesInicialesAgentes[] = new PosicionInicialAgente[4];
     private int posicionInicialAgente[] = new int[2];
-    private final JLabel tamañoRecintoLabel = new JLabel("Tamaño del recinto: ");
-    private JTextField tamañoRecintoText = new JTextField();
-    private final JLabel cantidadAgente = new JLabel("Agentes en la cueva: ");
-    private JTextField cantidadAgenteText = new JTextField();
-    final JSlider sliderTamañoRecinto = new JSlider(JSlider.HORIZONTAL, 5, 20, 10);
 
     //CONSTRUCTOR DE VISTA
     public Vista(String nombre, Control control) {
@@ -94,85 +106,113 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
     }
 
+    private JPanel panelOpcionesRecinto() {
+
+        opcionesRecinto.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.MatteBorder(null),
+                javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
+
+        JPanel texto = new JPanel(new FlowLayout());
+        tamañoRecintoText = new JTextField("5");
+        tamañoRecintoText.setFont(new Font("calibri", Font.BOLD, 30));
+        tamañoRecintoText.setEditable(false);
+        tamañoRecintoText.setText(String.valueOf(sliderTamañoRecinto.getValue()));
+        tamañoRecintoLabel.setFont(new Font("calibri", Font.BOLD, 30));
+        sliderTamañoRecinto.addChangeListener(this);
+
+        opcionesRecinto.setLayout(new GridLayout(2, 1));
+        texto.add(tamañoRecintoLabel);
+        texto.add(tamañoRecintoText);
+        opcionesRecinto.add(texto);
+        opcionesRecinto.add(sliderTamañoRecinto);
+
+        return opcionesRecinto;
+    }
+
+    private JPanel panelOpcionesObstaculo() {
+
+        opcionesObstaculo.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.MatteBorder(null),
+                javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
+
+        posicionarAbismo = new RadioButtonConImagen(new ImageIcon("src/monstrecaverna/modelo/abismo.png"));
+        posicionarMonstruo = new RadioButtonConImagen(new ImageIcon("src/monstrecaverna/modelo/monstruo.png"));
+        posicionarTesoro = new RadioButtonConImagen(new ImageIcon("src/monstrecaverna/modelo/tesoro.png"));
+
+        grupoBotones = new ButtonGroup();
+        posicionarAbismo.addToButtonGroup(grupoBotones);
+        posicionarMonstruo.addToButtonGroup(grupoBotones);
+        posicionarTesoro.addToButtonGroup(grupoBotones);
+
+        opcionesObstaculo.setLayout(new GridLayout(3, 1));
+
+        opcionesObstaculo.add(posicionarAbismo);
+        opcionesObstaculo.add(posicionarMonstruo);
+        opcionesObstaculo.add(posicionarTesoro);
+
+        return opcionesObstaculo;
+    }
+
+    private JPanel panelopcionesAgente() {
+
+        opcionesAgente.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.MatteBorder(null),
+                javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
+
+        JPanel texto = new JPanel(new FlowLayout());
+        cantidadAgente = new JLabel("Agentes en la cueva: ");
+        cantidadAgente.setFont(new Font("calibri", Font.BOLD, 30));
+        cantidadAgenteText = new JTextField("1");
+        cantidadAgenteText.setFont(new Font("calibri", Font.BOLD, 30));
+        cantidadAgenteText.setEditable(false);
+
+        opcionesAgente.setLayout(new GridLayout(3, 1));
+        cantidadAgenteText.setText(String.valueOf(sliderCantidadAgentes.getValue()));
+        sliderCantidadAgentes.addChangeListener(this);
+
+        iniciar = new JToggleButton("Iniciar");
+        iniciar.addItemListener(this);
+
+        texto.add(cantidadAgente);
+        texto.add(cantidadAgenteText);
+        opcionesAgente.add(texto);
+        opcionesAgente.add(sliderCantidadAgentes);
+        opcionesAgente.add(iniciar);
+
+        return opcionesAgente;
+    }
+
     //INICIAMOS LOS COMPONENTES DE LA VENTANA
     private void initComponents() {
 
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
 
         opciones.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        GridBagConstraints constraints = new GridBagConstraints();
 
-        posicionarAbismo = new JRadioButton("Abismo");
-        posicionarMonstruo = new JRadioButton("Monstruo");
-        posicionarTesoro = new JRadioButton("Tesoro");
-        grupoBotones = new ButtonGroup();
-        grupoBotones.add(posicionarAbismo);
-        grupoBotones.add(posicionarMonstruo);
-        grupoBotones.add(posicionarTesoro);
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        
+        constraints.gridx = 0; // El área de texto empieza en la columna cero.
+        constraints.gridy = 0; // El área de texto empieza en la fila cero
+        constraints.gridwidth = 1; // El área de texto ocupa dos columnas.
+        constraints.gridheight = 1; // El área de texto ocupa 2 filas.
+        opciones.add(panelOpcionesRecinto(), constraints);
+        constraints.gridx = 0; // El área de texto empieza en la columna cero.
+        constraints.gridy = 1; // El área de texto empieza en la fila cero
+        constraints.gridwidth = 1; // El área de texto ocupa dos columnas.
+        constraints.gridheight = 3; // El área de texto ocupa 2 filas.
+        opciones.add(panelOpcionesObstaculo(), constraints);
+        constraints.gridx = 0; // El área de texto empieza en la columna cero.
+        constraints.gridy = 4; // El área de texto empieza en la fila cero
+        constraints.gridwidth = 1; // El área de texto ocupa dos columnas.
+        constraints.gridheight = 1; // El área de texto ocupa 2 filas.
+        opciones.add(panelopcionesAgente(), constraints);
 
-        iniciar = new JToggleButton("Iniciar");
-        iniciar.addItemListener(new ItemListener() {
-
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                int estado = e.getStateChange();
-                if (estado == ItemEvent.SELECTED) {
-                    Thread thread = new Thread(control);
-                    control.setSimulacion(true);
-                    thread.start();
-                } else {
-                    control.setSimulacion(false);
-                }
-            }
-        });
-
-        tamañoRecintoText = new JTextField("5");
-        tamañoRecintoText.setEditable(false);
-        tamañoRecintoText.setText(String.valueOf(sliderTamañoRecinto.getValue()));
-        sliderTamañoRecinto.addChangeListener(this);
-
-        JPanel tamaño = new JPanel();
-        tamaño.setLayout(new FlowLayout());
-        tamaño.add(tamañoRecintoLabel);
-        tamaño.add(tamañoRecintoText);
-
-        cantidadAgenteText = new JTextField("1");
-        cantidadAgenteText.setEditable(true);
-        posicionarAgente = new JButton("Posicionar");
-        posicionarAgente.addActionListener(this);
-
-        JPanel agente = new JPanel();
-        agente.setLayout(new FlowLayout());
-        agente.add(cantidadAgente);
-        agente.add(cantidadAgenteText);
-
-        c.gridwidth = 1;
-        c.weighty = .2;
-        c.gridx = 0;
-        c.gridy = 1;
-        opciones.add(tamaño, c);
-        c.gridy = 2;
-        opciones.add(sliderTamañoRecinto, c);
-        c.gridy = 3;
-        opciones.add(agente, c);
-        c.gridy = 4;
-        opciones.add(posicionarAgente, c);
-        c.gridy = 5;
-        opciones.add(posicionarAbismo, c);
-        c.gridy = 6;
-        opciones.add(posicionarMonstruo, c);
-        c.gridy = 7;
-        opciones.add(posicionarTesoro, c);
-        c.gridy = 8;
-        opciones.add(iniciar, c);
         opciones.setMaximumSize(new Dimension((int) (ancho * 0.25), alto));
-
         recinto.setMaximumSize(new Dimension((int) (ancho * 0.75), alto));
 
-        this.add(recinto);
         this.add(opciones);
+        this.add(recinto);
+
         this.addComponentListener(this);
-        this.addMouseListener(this);
 
         //CALCULAMOS LO QUE OCUPA LA CUADRICULA Y LO QUE OCUPA CADA CUADRO
         double auxAncho = recinto.getWidth(), auxAlto = recinto.getHeight();
@@ -216,8 +256,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         //CUADROS DE LA MATRIZ
         opciones.setMaximumSize(new Dimension((int) (ancho * 0.25), alto));
         recinto.setMaximumSize(new Dimension((int) (ancho * 0.75), alto));
-        this.add(recinto);
         this.add(opciones);
+        this.add(recinto);
         double auxAncho = recinto.getWidth(), auxAlto = recinto.getHeight();
         int tamañoBase;
         if ((auxAncho / auxAlto) >= 1) {
@@ -264,6 +304,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                     matrizCuadros[i][j].setCentinela(true);
                     matrizCuadros[i][j].setPared(true);
                     matrizCuadros[i][j].setAgente(false, "");
+                    matrizCuadros[i][j].setAbismo(false);
+                    matrizCuadros[i][j].setMonstruo(false);
                 }
                 posY += tamañoBase;
             }
@@ -276,14 +318,14 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     }
 
     public void moverAgente(Direcciones direccion) {
-        directorioImagen = direccion.LINKFOTO;          
-        
+        directorioImagen = direccion.LINKFOTO;
+
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(false, "");
-        if(matrizCuadros[posicionAgente[0]][posicionAgente[1]].isBrisa()){
+        if (matrizCuadros[posicionAgente[0]][posicionAgente[1]].isBrisa()) {
             matrizCuadros[posicionAgente[0]][posicionAgente[1]].setBrisa(true);
-        }else if(matrizCuadros[posicionAgente[0]][posicionAgente[1]].isHedor()){
+        } else if (matrizCuadros[posicionAgente[0]][posicionAgente[1]].isHedor()) {
             matrizCuadros[posicionAgente[0]][posicionAgente[1]].setHedor(true);
-        }else if(matrizCuadros[posicionAgente[0]][posicionAgente[1]].isTesoro()){
+        } else if (matrizCuadros[posicionAgente[0]][posicionAgente[1]].isTesoro()) {
             matrizCuadros[posicionAgente[0]][posicionAgente[1]].setResplandor(false);
         }
         posicionAgente[0] += direccion.X;
@@ -291,7 +333,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(true, directorioImagen);
         repaint();
         try {
-            Thread.sleep(1000);
+            Thread.sleep(250);
         } catch (InterruptedException ex) {
             Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -304,7 +346,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         if (!src.getValueIsAdjusting() && e.getSource() == sliderTamañoRecinto) {
             tamañoRecintoText.setText(String.valueOf(src.getValue()));
             reinit();
-        } else if (!src.getValueIsAdjusting() && e.getSource() == posicionarAgente) {
+        } else if (!src.getValueIsAdjusting() && e.getSource() == sliderCantidadAgentes) {
             cantidadAgenteText.setText(String.valueOf(src.getValue()));
             reinit();
         }
@@ -334,108 +376,52 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
     //METODO QUE DEVUELVE EL CUADRO INDICADO POR a[]
     public Cuadro getCasilla(int[] a) {
-        int resultadoAbsoluto[] = {a[0] + posicionInicialAgente[0],a[1] + posicionInicialAgente[1]}; 
+        int resultadoAbsoluto[] = {a[0] + posicionInicialAgente[0], a[1] + posicionInicialAgente[1]};
         System.out.println("Resultado absoluto: " + Arrays.toString(resultadoAbsoluto));
         return matrizCuadros[a[0] + posicionInicialAgente[0]][a[1] + posicionInicialAgente[1]];
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
     }
 
     //LISTENER PARA CUANDO SE PULSA EL CLICK DEL RATON. CON ESTE METODO CAMBIAMOS
     //LOS ESTADOS DE pared Y agente DE LAS CASILLAS DE LA MATRIZ
     @Override
-    public void mousePressed(MouseEvent e) {
-        try {
-            int i = 0, j = 0;
-
-            for (i = 0; i <= matrizCuadros[0].length; i++) {
-                if (i == matrizCuadros[0].length) {
-                    if (matrizCuadros[0][i - 1].getY() + matrizCuadros[0][i - 1].getHeight() >= e.getY()) {
-                        i--;
-                        break;
-                    }
-                }
-                if (matrizCuadros[0][i].getY() > e.getY()) {
-                    i--;
-                    break;
+    public void itemStateChanged(ItemEvent e) {
+        int estado = e.getStateChange();
+        if (estado == ItemEvent.SELECTED) {
+            if (cantidadAgentes != sliderCantidadAgentes.getValue()) {
+                switch (sliderCantidadAgentes.getValue()) {
+                    case 4:
+                        matrizCuadros[matrizCuadros[1].length - 2][matrizCuadros[1].length - 2].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
+                        cantidadAgentes = 4;
+                    case 3:
+                        matrizCuadros[matrizCuadros[1].length - 2][1].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
+                        if (cantidadAgentes < 3) {
+                            cantidadAgentes = 3;
+                        }
+                    case 2:
+                        matrizCuadros[1][matrizCuadros[1].length - 2].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
+                        if (cantidadAgentes < 2) {
+                            cantidadAgentes = 2;
+                        }
+                    case 1:
+                        matrizCuadros[1][1].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
+                        if (cantidadAgentes < 1) {
+                            cantidadAgentes = 1;
+                        }
+                        posicionInicialAgente[0] = 1;
+                        posicionInicialAgente[1] = 1;
+                        posicionAgente[0] = 1;
+                        posicionAgente[1] = 1;
+                        Agente ag = new Agente(1, this);
+                        control.setAgente(ag);
                 }
             }
 
-            for (j = 0; j <= matrizCuadros[0].length; j++) {
-                if (j == matrizCuadros[0].length) {
-                    if (matrizCuadros[j - 1][0].getX() + matrizCuadros[j - 1][0].getWidth() >= e.getX()) {
-                        j--;
-                        break;
-                    }
-                }
-                if (matrizCuadros[j][i].getX() > e.getX()) {
-                    j--;
-                    break;
-                }
-            }
-
-            if (posicionarAbismo.isSelected() == true && matrizCuadros[j][i].isPared() == false) {
-                matrizCuadros[j][i].setAbismo(true);
-                matrizCuadros[j + 1][i].setBrisa(true);
-                matrizCuadros[j][i + 1].setBrisa(true);
-                matrizCuadros[j - 1][i].setBrisa(true);
-                matrizCuadros[j][i - 1].setBrisa(true);
-            } else if (posicionarMonstruo.isSelected() == true && matrizCuadros[j][i].isPared() == false) {
-                matrizCuadros[j][i].setMonstruo(true);
-                matrizCuadros[j + 1][i].setHedor(true);
-                matrizCuadros[j][i + 1].setHedor(true);
-                matrizCuadros[j - 1][i].setHedor(true);
-                matrizCuadros[j][i - 1].setHedor(true);
-            } else if (posicionarTesoro.isSelected() == true && matrizCuadros[j][i].isPared() == false) {
-                matrizCuadros[j][i].setResplandor(true);
-            }
             repaint();
-        } catch (Exception outOfBounds) {
-
+            Thread thread = new Thread(control);
+            control.setSimulacion(true);
+            thread.start();
+        } else {
+            control.setSimulacion(false);
         }
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e
-    ) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e
-    ) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e
-    ) {
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent ae) {
-        if (ae.getSource() == posicionarAgente) {
-            if ((Integer.parseInt(cantidadAgenteText.getText())) > 4) {
-                cantidadAgenteText.setText("4");
-            }
-            switch (Integer.parseInt(cantidadAgenteText.getText())) {
-                case 4:
-                    matrizCuadros[matrizCuadros[1].length - 2][matrizCuadros[1].length - 2].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
-                case 3:
-                    matrizCuadros[matrizCuadros[1].length - 2][1].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
-                case 2:
-                    matrizCuadros[1][matrizCuadros[1].length - 2].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
-                case 1:
-                    matrizCuadros[1][1].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
-                    posicionInicialAgente[0] = 1;
-                    posicionInicialAgente[1] = 1;
-                    posicionAgente[0] = 1;
-                    posicionAgente[1] = 1;
-                    Agente ag = new Agente(1, this);
-                    control.setAgente(ag);
-            }
-            repaint();
-        }
-
     }
 }

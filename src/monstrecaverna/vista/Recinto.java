@@ -94,7 +94,7 @@ public class Recinto extends JPanel implements MouseListener {
                 }
             }
 
-            if (vista.posicionarAbismo.isSelected() == true && vista.matrizCuadros[j][i].isAbismo() == true) {
+            if (vista.posicionarAbismo.getIsSelected() == true && vista.matrizCuadros[j][i].isAbismo() == true) {
                 System.out.println("Aqui");
                 vista.matrizCuadros[j][i].setAbismo(false);
                 vista.matrizCuadros[j + 1][i].setBrisa(false);
@@ -102,32 +102,32 @@ public class Recinto extends JPanel implements MouseListener {
                 vista.matrizCuadros[j - 1][i].setBrisa(false);
                 vista.matrizCuadros[j][i - 1].setBrisa(false);
 
-            } else if (vista.posicionarAbismo.isSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == false
+            } else if (vista.posicionarAbismo.getIsSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == false
                     && vista.matrizCuadros[j][i].isTesoro() == false && vista.matrizCuadros[j][i].isAgente() == false) {
                 vista.matrizCuadros[j][i].setAbismo(true);
-                vista.matrizCuadros[j + 1][i].setBrisa(true);
-                vista.matrizCuadros[j][i + 1].setBrisa(true);
-                vista.matrizCuadros[j - 1][i].setBrisa(true);
-                vista.matrizCuadros[j][i - 1].setBrisa(true);
-
-            } else if (vista.posicionarMonstruo.isSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == true) {
+                if(j < vista.matrizCuadros[j].length-2) vista.matrizCuadros[j + 1][i].setBrisa(true);
+                if(i < vista.matrizCuadros[j].length-2) vista.matrizCuadros[j][i + 1].setBrisa(true);
+                if((j-1) > 0) vista.matrizCuadros[j - 1][i].setBrisa(true);
+                if((i-1) > 0)vista.matrizCuadros[j][i - 1].setBrisa(true);
+                
+            } else if (vista.posicionarMonstruo.getIsSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == true) {
                 vista.matrizCuadros[j][i].setMonstruo(false);
                 vista.matrizCuadros[j + 1][i].setHedor(false);
                 vista.matrizCuadros[j][i + 1].setHedor(false);
                 vista.matrizCuadros[j - 1][i].setHedor(false);
                 vista.matrizCuadros[j][i - 1].setHedor(false);
 
-            } else if (vista.posicionarMonstruo.isSelected() == true && vista.matrizCuadros[j][i].isAbismo() == false
+            } else if (vista.posicionarMonstruo.getIsSelected() == true && vista.matrizCuadros[j][i].isAbismo() == false
                     && vista.matrizCuadros[j][i].isTesoro() == false && vista.matrizCuadros[j][i].isAgente() == false) {
                 vista.matrizCuadros[j][i].setMonstruo(true);
-                vista.matrizCuadros[j + 1][i].setHedor(true);
-                vista.matrizCuadros[j][i + 1].setHedor(true);
-                vista.matrizCuadros[j - 1][i].setHedor(true);
-                vista.matrizCuadros[j][i - 1].setHedor(true);
+                if(j < vista.matrizCuadros[j].length-2) vista.matrizCuadros[j + 1][i].setHedor(true);
+                if(i < vista.matrizCuadros[j].length-2) vista.matrizCuadros[j][i + 1].setHedor(true);
+                if((j-1) > 0) vista.matrizCuadros[j - 1][i].setHedor(true);
+                if((i-1) > 0) vista.matrizCuadros[j][i - 1].setHedor(true);
 
-            } else if (vista.posicionarTesoro.isSelected() == true && vista.matrizCuadros[j][i].isTesoro() == true) {
+            } else if (vista.posicionarTesoro.getIsSelected() == true && vista.matrizCuadros[j][i].isTesoro() == true) {
                 vista.matrizCuadros[j][i].setResplandor(false);
-            } else if (vista.posicionarTesoro.isSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == false
+            } else if (vista.posicionarTesoro.getIsSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == false
                     && vista.matrizCuadros[j][i].isAbismo() == false && vista.matrizCuadros[j][i].isAgente() == false) {
                 vista.matrizCuadros[j][i].setResplandor(true);
             }
