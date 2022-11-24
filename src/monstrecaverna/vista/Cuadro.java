@@ -72,7 +72,7 @@ public class Cuadro {
         this.hedor = h;
         if (h) {
             try {
-                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/hedor.png"));
+                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/suelo_hedor.png"));
             } catch (IOException ex) {
                 Logger.getLogger(Cuadro.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -83,7 +83,7 @@ public class Cuadro {
         this.brisa = s;
         if (s) {
             try {
-                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/brisa.png"));
+                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/suelo_brisa.png"));
             } catch (IOException ex) {
                 Logger.getLogger(Cuadro.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -94,7 +94,7 @@ public class Cuadro {
         this.resplandor = t;
         if (t) {
             try {
-                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/tesoro.png"));
+                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/suelo_tesoro.png"));
             } catch (IOException ex) {
                 Logger.getLogger(Cuadro.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -105,7 +105,7 @@ public class Cuadro {
         this.abismo = a;
         if (a) {
             try {
-                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/abismo.png"));
+                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/suelo_abismo.png"));
             } catch (IOException ex) {
                 Logger.getLogger(Cuadro.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -116,7 +116,7 @@ public class Cuadro {
         this.monstruo = m;
         if (m) {
             try {
-                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/monstruo.png"));
+                this.imagen = ImageIO.read(new File("src/monstrecaverna/modelo/suelo_monstruo.png"));
             } catch (IOException ex) {
                 Logger.getLogger(Cuadro.class.getName()).log(Level.SEVERE, null, ex);
             }

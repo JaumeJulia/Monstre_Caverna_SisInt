@@ -23,13 +23,17 @@ import javax.swing.JPanel;
 public class Recinto extends JPanel implements MouseListener {
 
     private Vista vista;
-    private Image img;
+    private Image img, img_suelo, img_pared_ns, img_pared_eo, img_puerta;
 
     public Recinto(Vista v) {
         this.vista = v;
         this.addMouseListener(this);
         try {
             this.img = ImageIO.read(new File("src/monstrecaverna/modelo/Hotpot_2.png"));
+            this.img_suelo = ImageIO.read(new File("src/monstrecaverna/modelo/suelo.png"));
+            this.img_pared_ns = ImageIO.read(new File("src/monstrecaverna/modelo/pared_ns.png"));
+            this.img_pared_eo = ImageIO.read(new File("src/monstrecaverna/modelo/pared_eo.png"));
+            this.img_puerta = ImageIO.read(new File("src/monstrecaverna/modelo/puerta.png"));
         } catch (IOException ex) {
             Logger.getLogger(Recinto.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -55,7 +59,38 @@ public class Recinto extends JPanel implements MouseListener {
 //                    g.fillRect(x, y, w, h);
                     g.setColor(Color.WHITE);
                     g.drawRect(x, y, w, h);
+                    g.drawImage(img_suelo, x, y, w, h, this);
+                }else if (vista.matrizCuadros[i][j].isPared()){
+                    if((i == vista.matrizCuadros[i].length-1 && j == vista.matrizCuadros[i].length-1) || (i == 0 && j == vista.matrizCuadros[i].length-1)){
+                        g.drawImage(img_pared_ns, x, y, w, h, this);
+                    }
+                    else if(i == 0 || i == vista.matrizCuadros[i].length-1){
+                        g.drawImage(img_pared_eo, x, y, w, h, this);
+                    } else if(j == 0 || j == vista.matrizCuadros[i].length-1){
+                        g.drawImage(img_pared_ns, x, y, w, h, this);
+                        
+                    }
                 }
+                switch(vista.sliderCantidadAgentes.getValue()){
+                    case 4: g.drawImage(img_puerta, vista.matrizCuadros[vista.matrizCuadros[1].length - 2][vista.matrizCuadros[1].length - 1].getX(),
+                            vista.matrizCuadros[vista.matrizCuadros[1].length - 2][vista.matrizCuadros[1].length - 1].getY(), 
+                            vista.matrizCuadros[vista.matrizCuadros[1].length - 2][vista.matrizCuadros[1].length - 1].getWidth(), 
+                            vista.matrizCuadros[vista.matrizCuadros[1].length - 2][vista.matrizCuadros[1].length - 1].getHeight(), this);
+                    
+                    case 3: g.drawImage(img_puerta, vista.matrizCuadros[vista.matrizCuadros[1].length - 2][0].getX(), 
+                            vista.matrizCuadros[vista.matrizCuadros[1].length - 2][0].getY(), 
+                            vista.matrizCuadros[vista.matrizCuadros[1].length - 2][0].getWidth(),
+                            vista.matrizCuadros[vista.matrizCuadros[1].length - 2][0].getHeight(), this);
+                    
+                    case 2: g.drawImage(img_puerta, vista.matrizCuadros[1][vista.matrizCuadros[1].length - 1].getX(), 
+                            vista.matrizCuadros[1][vista.matrizCuadros[1].length - 1].getY(), 
+                            vista.matrizCuadros[1][vista.matrizCuadros[1].length - 1].getWidth(), 
+                            vista.matrizCuadros[1][vista.matrizCuadros[1].length - 1].getHeight(), this);
+                    
+                    case 1: g.drawImage(img_puerta, vista.matrizCuadros[1][0].getX(), vista.matrizCuadros[1][0].getY(), 
+                            vista.matrizCuadros[1][0].getWidth(), vista.matrizCuadros[1][0].getHeight(), this);
+                }
+                if(i == 1 && j == 0) g.drawImage(img_puerta, x, y, w, h, this);
                 if (vista.matrizCuadros[i][j].isAgente() || vista.matrizCuadros[i][j].isAbismo()
                         || vista.matrizCuadros[i][j].isMonstruo() || vista.matrizCuadros[i][j].isTesoro()
                         || vista.matrizCuadros[i][j].isBrisa() || vista.matrizCuadros[i][j].isHedor()) {
