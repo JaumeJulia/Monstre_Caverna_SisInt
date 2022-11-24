@@ -114,7 +114,9 @@ public class Agente {
         
         posicionActual[0] += direcciones[direccionActual].X;
         posicionActual[1] += direcciones[direccionActual].Y;
-        memoria.recuerda(posicionActual, inversorDireccion(direcciones[direccionActual]));
+        if(memoria.getCasilla(posicionActual).getVisitada() < 1){
+            memoria.recuerda(posicionActual, inversorDireccion(direcciones[direccionActual]));
+        }
         System.out.println("Me dirijo al:" + direcciones[direccionActual].toString());
         System.out.println("------------------------ LISTO! ------------------------");
         MovimientoAgenteWrapper maw = new MovimientoAgenteWrapper(identificador, direcciones[direccionActual]);
