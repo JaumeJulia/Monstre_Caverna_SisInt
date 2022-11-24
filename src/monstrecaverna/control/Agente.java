@@ -6,7 +6,6 @@
 package monstrecaverna.control;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Random;
 import monstrecaverna.modelo.Casilla;
 import monstrecaverna.modelo.Direcciones;
@@ -20,15 +19,16 @@ import monstrecaverna.vista.Vista;
  */
 public class Agente {
     
-    Vista vista;
-    Direcciones direcciones[] = {Direcciones.NORTE, Direcciones.ESTE, Direcciones.SUR, Direcciones.OESTE};
-    int direccionActual;
-    int rotacion; // +1 cuando se rota en sentido horario, -1 cuando es antihorario
-    int[] posicionActual = new int[2];
-    boolean[] estadoCasillaActual; 
-    Memoria memoria;
-    boolean saliendo;
-    int identificador;
+    private Vista vista;
+    private Direcciones direcciones[] = {Direcciones.NORTE, Direcciones.ESTE, Direcciones.SUR, Direcciones.OESTE};
+    private int direccionActual;
+    private int rotacion; // +1 cuando se rota en sentido horario, -1 cuando es antihorario
+    private int[] posicionActual = new int[2];
+    private boolean[] estadoCasillaActual; 
+    private Memoria memoria;
+    private boolean saliendo;
+    private final int identificador;
+    private int tesoros;
     
     public Agente(int identificador, int rotacion, Vista vista){
         this.identificador = identificador;
@@ -40,6 +40,7 @@ public class Agente {
         memoria = new Memoria(posicionActual);
         this.vista = vista;
         saliendo = false;
+        tesoros = 0;
     }
     
     private Casilla[] reconocerEntorno(){
@@ -75,6 +76,9 @@ public class Agente {
     public MovimientoAgenteWrapper moverAgente(){
         System.out.println("------------------------ MOVIMIENTO AGENTE ------------------------");
         memoria.getCasilla(posicionActual).visitada();
+        if(vista.getCantidadTesoro() == 0){
+            saliendo = true;
+        }
         
         System.out.println("comprobacion de que se ha guardado: " + memoria.getCasilla(posicionActual).getVisitada());
         estadoCasillaActual = vista.getCasilla(identificador, posicionActual).getEstado(); //esto deberia devolver el array de booleanas que dice si hay hedor, brisa o resplandor
@@ -91,7 +95,12 @@ public class Agente {
         }
         if(estadoCasillaActual[2]){
             //coge el tesoro
-            saliendo = true; //se marca como que está saliendo, por lo que solo va a buscar la casilla antecesora en lugar de seguir explorando
+            if(vista.cogerTesoro(identificador)){
+                tesoros += 1;
+            }
+            if(vista.getCantidadTesoro() == 0 || !vista.getAvaricioso()){
+                saliendo = true; //se marca como que está saliendo, por lo que solo va a buscar la casilla antecesora en lugar de seguir explorando
+            }
         }
         Casilla[] entorno = reconocerEntorno();
         
@@ -143,4 +152,7 @@ public class Agente {
         direccionActual = Math.floorMod((direccionActual + sentido), 4);
     }
     
+    public int getTesoros(){
+        return tesoros;
+    }
 }

@@ -77,6 +77,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     boolean abismo = false, monstruo = false, tesoro = false;
     private int cantidadAgentes = 0, cantidadTesoro = 0;
     private PosicionAgente[] posicionesAgentes = new PosicionAgente[4];
+    private boolean avaricioso;
     //private int posicionAgente[] = new int[2];
     //private PosicionAgente posicionesInicialesAgentes[] = new PosicionAgente[4];
     //private int posicionInicialAgente[] = new int[2];
@@ -340,7 +341,30 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public boolean cogerTesoro(int identificador){
+        Cuadro casilla = getCasilla(identificador, posicionesAgentes[identificador].getPosicionActual());
+        boolean[] estado = casilla.getEstado();
+        if(estado[2]){
+            casilla.setResplandor(false);
+            cantidadTesoro -= 1;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    public void setCantidadTesoro(int cantidadTesoro) {
+        this.cantidadTesoro += cantidadTesoro;
+    }
+    
+    public int getCantidadTesoro(){
+        return cantidadTesoro;
+    }
+
+    public boolean getAvaricioso(){
+        return avaricioso;
+    }
     //LISTENER PARA EL SLIDER
     @Override
     public void stateChanged(ChangeEvent e) {

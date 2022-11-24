@@ -193,9 +193,11 @@ public class Recinto extends JPanel implements MouseListener {
 
             } else if (vista.posicionarTesoro.getIsSelected() == true && vista.matrizCuadros[j][i].isTesoro() == true) {
                 vista.matrizCuadros[j][i].setResplandor(false);
+                vista.setCantidadTesoro(-1);
             } else if (vista.posicionarTesoro.getIsSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == false
                     && vista.matrizCuadros[j][i].isAbismo() == false && vista.matrizCuadros[j][i].isAgente() == false) {
-                vista.matrizCuadros[j][i].setResplandor(true);
+                vista.matrizCuadros[j][i].setResplandor(true); 
+                vista.setCantidadTesoro(1);
             }
             repaint();
         } catch (Exception outOfBounds) {
