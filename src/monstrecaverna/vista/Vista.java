@@ -7,30 +7,24 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import monstrecaverna.control.Agente;
@@ -118,7 +112,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         tamañoRecintoText.setText(String.valueOf(sliderTamañoRecinto.getValue()));
         tamañoRecintoLabel.setFont(new Font("calibri", Font.BOLD, 30));
         sliderTamañoRecinto.addChangeListener(this);
-
+        
         opcionesRecinto.setLayout(new GridLayout(2, 1));
         texto.add(tamañoRecintoLabel);
         texto.add(tamañoRecintoText);
@@ -168,6 +162,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         sliderCantidadAgentes.addChangeListener(this);
 
         iniciar = new JToggleButton("Iniciar");
+        iniciar.setFont(new Font("calibri", Font.BOLD, 30));
         iniciar.addItemListener(this);
 
         texto.add(cantidadAgente);
@@ -184,33 +179,37 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
 
+        opciones.setBorder(javax.swing.BorderFactory.createMatteBorder(4, 4, 4, 4, new java.awt.Color(0, 0, 0)));
+        opciones.setMaximumSize(new Dimension((int) (ancho * 0.2), alto));
+        opciones.setBounds(0, 0, opciones.getMaximumSize().width, opciones.getMaximumSize().height);
+        recinto.setMaximumSize(new Dimension((int) (ancho * 0.8), alto));
+
         opciones.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
         constraints.weightx = 1.0;
         constraints.weighty = 1.0;
-        
-        constraints.gridx = 0; // El área de texto empieza en la columna cero.
-        constraints.gridy = 0; // El área de texto empieza en la fila cero
-        constraints.gridwidth = 1; // El área de texto ocupa dos columnas.
-        constraints.gridheight = 1; // El área de texto ocupa 2 filas.
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.CENTER;
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 4;
+        constraints.gridheight = 1;
         opciones.add(panelOpcionesRecinto(), constraints);
-        constraints.gridx = 0; // El área de texto empieza en la columna cero.
-        constraints.gridy = 1; // El área de texto empieza en la fila cero
-        constraints.gridwidth = 1; // El área de texto ocupa dos columnas.
-        constraints.gridheight = 3; // El área de texto ocupa 2 filas.
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 4;
+        constraints.gridheight = 3;
         opciones.add(panelOpcionesObstaculo(), constraints);
-        constraints.gridx = 0; // El área de texto empieza en la columna cero.
-        constraints.gridy = 4; // El área de texto empieza en la fila cero
-        constraints.gridwidth = 1; // El área de texto ocupa dos columnas.
-        constraints.gridheight = 1; // El área de texto ocupa 2 filas.
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.gridwidth = 4;
+        constraints.gridheight = 1;
         opciones.add(panelopcionesAgente(), constraints);
 
-        opciones.setMaximumSize(new Dimension((int) (ancho * 0.25), alto));
-        recinto.setMaximumSize(new Dimension((int) (ancho * 0.75), alto));
-
-        this.add(opciones);
         this.add(recinto);
+        this.add(opciones);
 
         this.addComponentListener(this);
 
@@ -254,10 +253,11 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     private void reinit() {
         //RECALCULAMOS LOS ESPACIOS QUE OCUPAN LOS PANELES Y EL TAMAÑO DE LOS
         //CUADROS DE LA MATRIZ
-        opciones.setMaximumSize(new Dimension((int) (ancho * 0.25), alto));
-        recinto.setMaximumSize(new Dimension((int) (ancho * 0.75), alto));
-        this.add(opciones);
+        opciones.setMaximumSize(new Dimension((int) (ancho * 0.2), alto));
+        recinto.setMaximumSize(new Dimension((int) (ancho * 0.8), alto));
         this.add(recinto);
+        this.add(opciones);
+
         double auxAncho = recinto.getWidth(), auxAlto = recinto.getHeight();
         int tamañoBase;
         if ((auxAncho / auxAlto) >= 1) {
@@ -285,18 +285,17 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                     if (auxMatrizCuadros[i][j].isCentinela() == true) {
                         matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase,
                                 false, auxMatrizCuadros[i][j].isAgente(), false);
-                        matrizCuadros[i][j].setAbismo(auxMatrizCuadros[i][j].isAbismo());
-                        matrizCuadros[i][j].setMonstruo(auxMatrizCuadros[i][j].isMonstruo());
-                        matrizCuadros[i][j].setResplandor(auxMatrizCuadros[i][j].isTesoro());
-                        matrizCuadros[i][j].setImagen(auxMatrizCuadros[i][j].getImagen());
+
                     } else {
                         matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase,
                                 auxMatrizCuadros[i][j].isPared(), auxMatrizCuadros[i][j].isAgente(), false);
-                        matrizCuadros[i][j].setAbismo(auxMatrizCuadros[i][j].isAbismo());
-                        matrizCuadros[i][j].setMonstruo(auxMatrizCuadros[i][j].isMonstruo());
-                        matrizCuadros[i][j].setResplandor(auxMatrizCuadros[i][j].isTesoro());
-                        matrizCuadros[i][j].setImagen(auxMatrizCuadros[i][j].getImagen());
                     }
+                    matrizCuadros[i][j].setAbismo(auxMatrizCuadros[i][j].isAbismo());
+                    matrizCuadros[i][j].setMonstruo(auxMatrizCuadros[i][j].isMonstruo());
+                    matrizCuadros[i][j].setResplandor(auxMatrizCuadros[i][j].isTesoro());
+                    matrizCuadros[i][j].setBrisa(auxMatrizCuadros[i][j].isBrisa());
+                    matrizCuadros[i][j].setHedor(auxMatrizCuadros[i][j].isHedor());
+                    matrizCuadros[i][j].setImagen(auxMatrizCuadros[i][j].getImagen());
                 } else {
                     matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase, false, false, false);
                 }
