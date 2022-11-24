@@ -11,6 +11,7 @@ import java.util.Random;
 import monstrecaverna.modelo.Casilla;
 import monstrecaverna.modelo.Direcciones;
 import monstrecaverna.modelo.Memoria;
+import monstrecaverna.modelo.MovimientoAgenteWrapper;
 import monstrecaverna.vista.Vista;
 
 /**
@@ -27,8 +28,10 @@ public class Agente {
     boolean[] estadoCasillaActual; 
     Memoria memoria;
     boolean saliendo;
+    int identificador;
     
-    public Agente(int rotacion, Vista vista){
+    public Agente(int identificador, int rotacion, Vista vista){
+        this.identificador = identificador;
         Random ran = new Random();
         direccionActual = ran.nextInt(20) % 4;
         this.rotacion = rotacion;
@@ -49,7 +52,7 @@ public class Agente {
             System.out.println("Posicion actual del agente: " + Arrays.toString(posicionActual));
             int[] casillaCercana = {posicionActual[0] + direcciones[direccionActual].X, posicionActual[1] + direcciones[direccionActual].Y};
             System.out.println("Investigo la casilla " + Arrays.toString(casillaCercana));
-            if(vista.getCasilla(casillaCercana).isPared()){
+            if(vista.getCasilla(identificador, casillaCercana).isPared()){
                 System.out.println("PARED!");
                 entorno[i].setPared(true);
             }
@@ -69,12 +72,12 @@ public class Agente {
         return entorno;        
     }
     
-    public Direcciones moverAgente(){
+    public MovimientoAgenteWrapper moverAgente(){
         System.out.println("------------------------ MOVIMIENTO AGENTE ------------------------");
         memoria.getCasilla(posicionActual).visitada();
         
         System.out.println("comprobacion de que se ha guardado: " + memoria.getCasilla(posicionActual).getVisitada());
-        estadoCasillaActual = vista.getCasilla(posicionActual).getEstado(); //esto deberia devolver el array de booleanas que dice si hay hedor, brisa o resplandor
+        estadoCasillaActual = vista.getCasilla(identificador, posicionActual).getEstado(); //esto deberia devolver el array de booleanas que dice si hay hedor, brisa o resplandor
         if(saliendo){
             if(posicionActual[0] == 0 && posicionActual[1] == 0){
                 return null;
@@ -82,7 +85,9 @@ public class Agente {
             Direcciones direccion = memoria.getCasilla(posicionActual).getAntecesora();
             posicionActual[0] += direccion.X;
             posicionActual[1] += direccion.Y;
-            return direccion;//se dirige a la casilla antecesora
+            MovimientoAgenteWrapper maw = new MovimientoAgenteWrapper(identificador, direccion);
+            return maw;
+            //return direccion;//se dirige a la casilla antecesora
         }
         if(estadoCasillaActual[2]){
             //coge el tesoro
@@ -112,7 +117,9 @@ public class Agente {
         memoria.recuerda(posicionActual, inversorDireccion(direcciones[direccionActual]));
         System.out.println("Me dirijo al:" + direcciones[direccionActual].toString());
         System.out.println("------------------------ LISTO! ------------------------");
-        return direcciones[direccionActual];
+        MovimientoAgenteWrapper maw = new MovimientoAgenteWrapper(identificador, direcciones[direccionActual]);
+        return maw;
+        //return direcciones[direccionActual];
     }
     
     private Direcciones inversorDireccion(Direcciones direccion){

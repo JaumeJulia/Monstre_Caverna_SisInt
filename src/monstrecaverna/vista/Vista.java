@@ -30,7 +30,8 @@ import javax.swing.event.ChangeListener;
 import monstrecaverna.control.Agente;
 import monstrecaverna.control.Control;
 import monstrecaverna.modelo.Direcciones;
-import monstrecaverna.modelo.PosicionInicialAgente;
+import monstrecaverna.modelo.MovimientoAgenteWrapper;
+import monstrecaverna.modelo.PosicionAgente;
 
 /**
  *
@@ -75,9 +76,10 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     //Información general de la vista
     boolean abismo = false, monstruo = false, tesoro = false;
     private int cantidadAgentes = 0, cantidadTesoro = 0;
-    private int posicionAgente[] = new int[2];
-    private PosicionInicialAgente posicionesInicialesAgentes[] = new PosicionInicialAgente[4];
-    private int posicionInicialAgente[] = new int[2];
+    private PosicionAgente[] posicionesAgentes = new PosicionAgente[4];
+    //private int posicionAgente[] = new int[2];
+    //private PosicionAgente posicionesInicialesAgentes[] = new PosicionAgente[4];
+    //private int posicionInicialAgente[] = new int[2];
 
     //CONSTRUCTOR DE VISTA
     public Vista(String nombre, Control control) {
@@ -316,9 +318,10 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
     }
 
-    public void moverAgente(Direcciones direccion) {
-        directorioImagen = direccion.LINKFOTO;
-
+    public void moverAgente(MovimientoAgenteWrapper movimiento) {
+        directorioImagen = movimiento.getDireccion().LINKFOTO;
+        int[] posicionAgente = posicionesAgentes[movimiento.getIdentificador()].getPosicionActual();
+        
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(false, "");
         if (matrizCuadros[posicionAgente[0]][posicionAgente[1]].isBrisa()) {
             matrizCuadros[posicionAgente[0]][posicionAgente[1]].setBrisa(true);
@@ -327,8 +330,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         } else if (matrizCuadros[posicionAgente[0]][posicionAgente[1]].isTesoro()) {
             matrizCuadros[posicionAgente[0]][posicionAgente[1]].setResplandor(false);
         }
-        posicionAgente[0] += direccion.X;
-        posicionAgente[1] += direccion.Y;
+        posicionAgente[0] += movimiento.getDireccion().X;
+        posicionAgente[1] += movimiento.getDireccion().Y;
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(true, directorioImagen);
         repaint();
         try {
@@ -374,7 +377,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     }
 
     //METODO QUE DEVUELVE EL CUADRO INDICADO POR a[]
-    public Cuadro getCasilla(int[] a) {
+    public Cuadro getCasilla(int id, int[] a) {
+        int[] posicionInicialAgente = posicionesAgentes[id].getPosicionInicial();
         int resultadoAbsoluto[] = {a[0] + posicionInicialAgente[0], a[1] + posicionInicialAgente[1]};
         System.out.println("Resultado absoluto: " + Arrays.toString(resultadoAbsoluto));
         return matrizCuadros[a[0] + posicionInicialAgente[0]][a[1] + posicionInicialAgente[1]];
@@ -406,16 +410,15 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                         if (cantidadAgentes < 1) {
                             cantidadAgentes = 1;
                         }
-                        posicionInicialAgente[0] = 1;
-                        posicionInicialAgente[1] = 1;
-                        posicionAgente[0] = 1;
-                        posicionAgente[1] = 1;
-                        Agente ag = new Agente(1, this);
+                        int[] posicionAux = {1,1};
+                        PosicionAgente posicionAgente = new PosicionAgente(posicionAux);
+                        posicionesAgentes[0] = posicionAgente;
+                        Agente ag = new Agente(0, 1, this);
                         control.setAgente(ag);
                 }
             }
 
-            repaint();
+            repaint();        
             Thread thread = new Thread(control);
             control.setSimulacion(true);
             thread.start();
