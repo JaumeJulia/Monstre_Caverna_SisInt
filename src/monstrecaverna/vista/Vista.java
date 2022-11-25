@@ -115,7 +115,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         tamañoRecintoText.setText(String.valueOf(sliderTamañoRecinto.getValue()));
         tamañoRecintoLabel.setFont(new Font("calibri", Font.BOLD, 30));
         sliderTamañoRecinto.addChangeListener(this);
-
+        
         opcionesRecinto.setLayout(new GridLayout(2, 1));
         texto.add(tamañoRecintoLabel);
         texto.add(tamañoRecintoText);
@@ -243,6 +243,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                 } else {
                     matrizCuadros[i][j] = new Cuadro(posX, posY, tamañoBase, tamañoBase, false, false, false);
                 }
+
                 posY += tamañoBase;
             }
             posX += tamañoBase;
@@ -429,7 +430,15 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                             cantidadAgentes = 2;
                         }
                     case 1:
-                        setAgente(1,1,1);
+                        matrizCuadros[1][1].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
+                        if (cantidadAgentes < 1) {
+                            cantidadAgentes = 1;
+                        }
+                        int[] posicionAux = {1,1};
+                        PosicionAgente posicionAgente = new PosicionAgente(posicionAux);
+                        posicionesAgentes[0] = posicionAgente;
+                        Agente ag = new Agente(0, 1, this);
+                        control.setAgente(ag);
                 }
             }
 
@@ -439,51 +448,6 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             thread.start();
         } else {
             control.setSimulacion(false);
-        }
-    }
-
-    private void setAgente(int identificador, int i, int j) {
-        matrizCuadros[i][j].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
-        if (cantidadAgentes < 1) {
-            cantidadAgentes = 1;
-        }
-        int [] pos = {i, j};
-        posicionesAgentes[0] = new PosicionAgente(pos);
-        setAbismo(i, j, false);
-        setMonstruo(i, j, false);
-        Agente ag = new Agente(identificador, 1, this);
-        control.setAgente(ag);
-    }
-
-    public void setAbismo(int i, int j, boolean b) {
-        matrizCuadros[i][j].setAbismo(b);
-        if (i < matrizCuadros[j].length - 2) {
-            matrizCuadros[i + 1][j].setBrisa(b);
-        }
-        if (j < matrizCuadros[j].length - 2) {
-            matrizCuadros[i][j + 1].setBrisa(b);
-        }
-        if ((i - 1) > 0) {
-            matrizCuadros[i - 1][j].setBrisa(b);
-        }
-        if ((j - 1) > 0) {
-            matrizCuadros[i][j - 1].setBrisa(b);
-        }
-    }
-
-    public void setMonstruo(int i, int j, boolean b) {
-        matrizCuadros[i][j].setMonstruo(b);
-        if (i < matrizCuadros[j].length - 2) {
-            matrizCuadros[i + 1][j].setHedor(b);
-        }
-        if (j < matrizCuadros[j].length - 2) {
-            matrizCuadros[i][j + 1].setHedor(b);
-        }
-        if ((i - 1) > 0) {
-            matrizCuadros[i - 1][j].setHedor(b);
-        }
-        if ((j - 1) > 0) {
-            matrizCuadros[i][j - 1].setHedor(b);
         }
     }
 }

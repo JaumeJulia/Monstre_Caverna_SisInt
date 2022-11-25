@@ -57,8 +57,8 @@ public class Recinto extends JPanel implements MouseListener {
 //                    g.fillRect(x, y, w, h);
 //                    g.setColor(Color.WHITE);
 //                    g.fillRect(x, y, w, h);
-//                    g.setColor(Color.WHITE);
-//                    g.drawRect(x, y, w, h);
+                    g.setColor(Color.WHITE);
+                    g.drawRect(x, y, w, h);
                     g.drawImage(img_suelo, x, y, w, h, this);
                 }else if (vista.matrizCuadros[i][j].isPared()){
                     if((i == vista.matrizCuadros[i].length-1 && j == vista.matrizCuadros[i].length-1) || (i == 0 && j == vista.matrizCuadros[i].length-1)){
@@ -145,19 +145,51 @@ public class Recinto extends JPanel implements MouseListener {
             }
 
             if (vista.posicionarAbismo.getIsSelected() == true && vista.matrizCuadros[j][i].isAbismo() == true) {
-                vista.setAbismo(j, i, false);
+                System.out.println("Aqui");
+                vista.matrizCuadros[j][i].setAbismo(false);
+                vista.matrizCuadros[j + 1][i].setBrisa(false);
+                vista.matrizCuadros[j][i + 1].setBrisa(false);
+                vista.matrizCuadros[j - 1][i].setBrisa(false);
+                vista.matrizCuadros[j][i - 1].setBrisa(false);
 
             } else if (vista.posicionarAbismo.getIsSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == false
                     && vista.matrizCuadros[j][i].isTesoro() == false && vista.matrizCuadros[j][i].isAgente() == false) {
-                vista.setAbismo(j, i, true);
+                vista.matrizCuadros[j][i].setAbismo(true);
+                if (j < vista.matrizCuadros[j].length - 2) {
+                    vista.matrizCuadros[j + 1][i].setBrisa(true);
+                }
+                if (i < vista.matrizCuadros[j].length - 2) {
+                    vista.matrizCuadros[j][i + 1].setBrisa(true);
+                }
+                if ((j - 1) > 0) {
+                    vista.matrizCuadros[j - 1][i].setBrisa(true);
+                }
+                if ((i - 1) > 0) {
+                    vista.matrizCuadros[j][i - 1].setBrisa(true);
+                }
 
             } else if (vista.posicionarMonstruo.getIsSelected() == true && vista.matrizCuadros[j][i].isMonstruo() == true) {
-                vista.setMonstruo(j, i, false);
+                vista.matrizCuadros[j][i].setMonstruo(false);
+                vista.matrizCuadros[j + 1][i].setHedor(false);
+                vista.matrizCuadros[j][i + 1].setHedor(false);
+                vista.matrizCuadros[j - 1][i].setHedor(false);
+                vista.matrizCuadros[j][i - 1].setHedor(false);
 
             } else if (vista.posicionarMonstruo.getIsSelected() == true && vista.matrizCuadros[j][i].isAbismo() == false
                     && vista.matrizCuadros[j][i].isTesoro() == false && vista.matrizCuadros[j][i].isAgente() == false) {
-                
-                vista.setMonstruo(j, i, true);
+                vista.matrizCuadros[j][i].setMonstruo(true);
+                if (j < vista.matrizCuadros[j].length - 2) {
+                    vista.matrizCuadros[j + 1][i].setHedor(true);
+                }
+                if (i < vista.matrizCuadros[j].length - 2) {
+                    vista.matrizCuadros[j][i + 1].setHedor(true);
+                }
+                if ((j - 1) > 0) {
+                    vista.matrizCuadros[j - 1][i].setHedor(true);
+                }
+                if ((i - 1) > 0) {
+                    vista.matrizCuadros[j][i - 1].setHedor(true);
+                }
 
             } else if (vista.posicionarTesoro.getIsSelected() == true && vista.matrizCuadros[j][i].isTesoro() == true) {
                 vista.matrizCuadros[j][i].setResplandor(false);
