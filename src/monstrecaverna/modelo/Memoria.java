@@ -27,21 +27,26 @@ public class Memoria {
                 casilla.setSegura();
             }
         } else {
-            if(estado[1]){ //En la casilla ocupada se percibe un HEDOR
+            if(estado[1] && estado[2]){
                 for(Casilla casilla : entorno){
-                    if(casilla.getNivelBrisa() == 0){
-                        casilla.incrementaNivelHedor();
-                    } else {
-                        casilla.setSegura();
-                    }
+                    casilla.confusionMaxima();
                 }
-            }
-            if(estado[2]){ //En la casilla ocupada se percibe BRISA
-                for(Casilla casilla : entorno){
-                    if(casilla.getNivelHedor()== 0){
-                        casilla.incrementaNivelBrisa();
-                    } else {
-                        casilla.setSegura();
+            } else {
+                if(estado[1]){ //En la casilla ocupada se percibe un HEDOR
+                    for(Casilla casilla : entorno){
+                        if(casilla.getNivelBrisa() == 0){
+                            casilla.incrementaNivelHedor();
+                        } else {
+                            casilla.setSegura();
+                        }
+                    }
+                }else if(estado[2]){ //En la casilla ocupada se percibe BRISA
+                    for(Casilla casilla : entorno){
+                        if(casilla.getNivelHedor()== 0){
+                            casilla.incrementaNivelBrisa();
+                        } else {
+                            casilla.setSegura();
+                        }
                     }
                 }
             }

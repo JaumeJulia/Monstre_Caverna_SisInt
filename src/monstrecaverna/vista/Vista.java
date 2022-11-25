@@ -429,7 +429,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                             cantidadAgentes = 2;
                         }
                     case 1:
-                        setAgente(1,1,1);
+                        setAgente(0,1,1);
                 }
             }
 
@@ -448,7 +448,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             cantidadAgentes = 1;
         }
         int [] pos = {i, j};
-        posicionesAgentes[0] = new PosicionAgente(pos);
+        posicionesAgentes[identificador] = new PosicionAgente(pos);
         setAbismo(i, j, false);
         setMonstruo(i, j, false);
         Agente ag = new Agente(identificador, 1, this);
