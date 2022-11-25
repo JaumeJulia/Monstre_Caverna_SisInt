@@ -62,20 +62,27 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
     //Opciones para añadir obstaculos o tesoros
     private final JPanel opcionesObstaculo = new JPanel();
+    private final JLabel obstaculos = new JLabel("Obstaculos");
     RadioButtonConImagen posicionarAbismo, posicionarMonstruo, posicionarTesoro;
-    private JLabel imagenAbismo, imagenMonstruo, imagenTesoro;
-    private ButtonGroup grupoBotones;
+    private ButtonGroup grupoBotonesPosicionar;
 
     //Opciones de inicio para los agentes
     private final JPanel opcionesAgente = new JPanel();
-    private JLabel cantidadAgente;
-    private JTextField cantidadAgenteText;
+    private JLabel cantidadAgente, velocidadAgente;
+    private JTextField cantidadAgenteText, velocidadAgenteText;
     final JSlider sliderCantidadAgentes = new JSlider(JSlider.HORIZONTAL, 1, 4, 1);
+    final JSlider sliderVelocidadAgentes = new JSlider(JSlider.HORIZONTAL, 100, 1000, 250);
     private JToggleButton iniciar;
+    
+    //Opciones para seleccionar el modo de juego
+    private final JPanel opcionesGamemode = new JPanel();
+    private final JLabel gamemodes = new JLabel("Modo de juego");
+    RadioButtonConImagen busquedaRapida, busquedaAvariciosa;
+    private ButtonGroup grupoBotonesGamemode;
 
     //Información general de la vista
     boolean abismo = false, monstruo = false, tesoro = false;
-    private int cantidadAgentes = 0, cantidadTesoro = 0;
+    private int cantidadAgentes = 0, cantidadTesoro = 0, velocidad = 250;
     private PosicionAgente[] posicionesAgentes = new PosicionAgente[4];
     private boolean avaricioso;
     //private int posicionAgente[] = new int[2];
@@ -129,26 +136,35 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
         opcionesObstaculo.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.MatteBorder(null),
                 javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
-
+        
+        obstaculos.setFont(new Font("calibri", Font.BOLD, 30));
+        
+        JPanel obstaculosPanel = new JPanel(new FlowLayout());
+        obstaculosPanel.add(obstaculos);
         posicionarAbismo = new RadioButtonConImagen(new ImageIcon("src/monstrecaverna/modelo/abismo.png"));
         posicionarMonstruo = new RadioButtonConImagen(new ImageIcon("src/monstrecaverna/modelo/monstruo.png"));
         posicionarTesoro = new RadioButtonConImagen(new ImageIcon("src/monstrecaverna/modelo/tesoro.png"));
 
-        grupoBotones = new ButtonGroup();
-        posicionarAbismo.addToButtonGroup(grupoBotones);
-        posicionarMonstruo.addToButtonGroup(grupoBotones);
-        posicionarTesoro.addToButtonGroup(grupoBotones);
+        grupoBotonesPosicionar = new ButtonGroup();
+        posicionarAbismo.addToButtonGroup(grupoBotonesPosicionar);
+        posicionarMonstruo.addToButtonGroup(grupoBotonesPosicionar);
+        posicionarTesoro.addToButtonGroup(grupoBotonesPosicionar);
 
-        opcionesObstaculo.setLayout(new GridLayout(3, 1));
-
-        opcionesObstaculo.add(posicionarAbismo);
-        opcionesObstaculo.add(posicionarMonstruo);
-        opcionesObstaculo.add(posicionarTesoro);
+        opcionesObstaculo.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 0; c.gridwidth = 1; c.gridheight = 1;
+        opcionesObstaculo.add(obstaculosPanel, c);
+        c.gridy = 1;
+        opcionesObstaculo.add(posicionarAbismo, c);
+        c.gridy = 2;
+        opcionesObstaculo.add(posicionarMonstruo, c);
+        c.gridy = 3;
+        opcionesObstaculo.add(posicionarTesoro, c);
 
         return opcionesObstaculo;
     }
 
-    private JPanel panelopcionesAgente() {
+    private JPanel panelOpcionesAgente() {
 
         opcionesAgente.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.MatteBorder(null),
                 javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
@@ -159,8 +175,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         cantidadAgenteText = new JTextField("1");
         cantidadAgenteText.setFont(new Font("calibri", Font.BOLD, 30));
         cantidadAgenteText.setEditable(false);
-
-        opcionesAgente.setLayout(new GridLayout(3, 1));
+        
         cantidadAgenteText.setText(String.valueOf(sliderCantidadAgentes.getValue()));
         sliderCantidadAgentes.addChangeListener(this);
 
@@ -168,15 +183,59 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         iniciar.setFont(new Font("calibri", Font.BOLD, 30));
         iniciar.addItemListener(this);
 
+        
+        JPanel texto_2 = new JPanel(new FlowLayout());
+        velocidadAgente = new JLabel ("Sleep agente: ");
+        velocidadAgente.setFont(new Font("calibri", Font.BOLD, 30));
+        velocidadAgenteText = new JTextField("250ms");
+        velocidadAgenteText.setFont(new Font("calibri", Font.BOLD, 20));
+        velocidadAgenteText.setEditable(false);
+        
+        velocidadAgenteText.setText(String.valueOf(sliderVelocidadAgentes.getValue())+"ms");
+        sliderVelocidadAgentes.addChangeListener(this);
+
+        opcionesAgente.setLayout(new GridLayout(5, 1));
+        
         texto.add(cantidadAgente);
         texto.add(cantidadAgenteText);
         opcionesAgente.add(texto);
         opcionesAgente.add(sliderCantidadAgentes);
         opcionesAgente.add(iniciar);
+        texto_2.add(velocidadAgente);
+        texto_2.add(velocidadAgenteText);
+        opcionesAgente.add(texto_2);
+        opcionesAgente.add(sliderVelocidadAgentes);
 
         return opcionesAgente;
     }
 
+    private JPanel panelOpcionesJuego() {
+
+        opcionesGamemode.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.MatteBorder(null),
+                javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
+
+        gamemodes.setFont(new Font("calibri", Font.BOLD, 30));
+        JPanel gamemodesPanel = new JPanel(new FlowLayout());
+        gamemodesPanel.add(gamemodes);
+        busquedaRapida = new RadioButtonConImagen(new ImageIcon("src/monstrecaverna/modelo/tesoro.png"));
+        busquedaAvariciosa = new RadioButtonConImagen(new ImageIcon("src/monstrecaverna/modelo/tesoros.png"));
+
+        grupoBotonesGamemode = new ButtonGroup();
+        busquedaRapida.addToButtonGroup(grupoBotonesGamemode);
+        busquedaAvariciosa.addToButtonGroup(grupoBotonesGamemode);
+
+        opcionesGamemode.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 0; c.gridwidth = 2; c.gridheight = 1;
+        opcionesGamemode.add(gamemodesPanel, c);
+        c.gridy = 1; c.gridwidth = 1;
+        opcionesGamemode.add(busquedaRapida, c);
+        c.gridx = 1; c.gridy = 1; c.gridwidth = 1;
+        opcionesGamemode.add(busquedaAvariciosa, c);
+        
+        return opcionesGamemode;
+    }
+        
     //INICIAMOS LOS COMPONENTES DE LA VENTANA
     private void initComponents() {
 
@@ -192,24 +251,26 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
         constraints.weightx = 1.0;
         constraints.weighty = 1.0;
+        constraints.gridwidth = 4;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.anchor = GridBagConstraints.CENTER;
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.gridwidth = 4;
         constraints.gridheight = 1;
         opciones.add(panelOpcionesRecinto(), constraints);
         constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.gridwidth = 4;
         constraints.gridheight = 3;
         opciones.add(panelOpcionesObstaculo(), constraints);
         constraints.gridx = 0;
         constraints.gridy = 4;
-        constraints.gridwidth = 4;
         constraints.gridheight = 1;
-        opciones.add(panelopcionesAgente(), constraints);
+        opciones.add(panelOpcionesAgente(), constraints);
+        constraints.gridx = 0;
+        constraints.gridy = 5;
+        constraints.gridheight = 1;
+        opciones.add(panelOpcionesJuego(), constraints);
 
         this.add(recinto);
         this.add(opciones);
@@ -334,11 +395,6 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         posicionAgente[1] += movimiento.getDireccion().Y;
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(true, directorioImagen);
         repaint();
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     public boolean cogerTesoro(int identificador){
@@ -362,7 +418,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     }
 
     public boolean getAvaricioso(){
-        return avaricioso;
+        return busquedaAvariciosa.getIsSelected();
     }
     //LISTENER PARA EL SLIDER
     @Override
@@ -374,6 +430,9 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         } else if (!src.getValueIsAdjusting() && e.getSource() == sliderCantidadAgentes) {
             cantidadAgenteText.setText(String.valueOf(src.getValue()));
             reinit();
+        } else if(!src.getValueIsAdjusting() && e.getSource() == sliderVelocidadAgentes){
+            velocidadAgenteText.setText(String.valueOf(src.getValue())+"ms");
+            velocidad = src.getValue();
         }
 
     }
@@ -429,7 +488,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                             cantidadAgentes = 2;
                         }
                     case 1:
-                        setAgente(1,1,1);
+                        setAgente(0,1,1);
                 }
             }
 
@@ -485,5 +544,9 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         if ((j - 1) > 0) {
             matrizCuadros[i][j - 1].setHedor(b);
         }
+    }
+    
+    public int getVelocidad(){
+        return velocidad;
     }
 }

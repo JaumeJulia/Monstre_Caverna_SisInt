@@ -34,9 +34,9 @@ public class Control implements Runnable {
     @Override
     public void run() {
         while(simulacion){        
-            vista.moverAgente(agente.moverAgente());
+                vista.moverAgente(agente.moverAgente());
             try {
-                sleep(100);
+                sleep(vista.getVelocidad());
             } catch (InterruptedException ex) {
                 Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
             }
