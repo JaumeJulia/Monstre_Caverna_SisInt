@@ -321,7 +321,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     public void moverAgente(MovimientoAgenteWrapper movimiento) {
         directorioImagen = movimiento.getDireccion().LINKFOTO;
         int[] posicionAgente = posicionesAgentes[movimiento.getIdentificador()].getPosicionActual();
-        
+
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(false, "");
         if (matrizCuadros[posicionAgente[0]][posicionAgente[1]].isBrisa()) {
             matrizCuadros[posicionAgente[0]][posicionAgente[1]].setBrisa(true);
@@ -340,11 +340,11 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public boolean cogerTesoro(int identificador){
+
+    public boolean cogerTesoro(int identificador) {
         Cuadro casilla = getCasilla(identificador, posicionesAgentes[identificador].getPosicionActual());
         boolean[] estado = casilla.getEstado();
-        if(estado[2]){
+        if (estado[2]) {
             casilla.setResplandor(false);
             cantidadTesoro -= 1;
             return true;
@@ -356,14 +356,15 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     public void setCantidadTesoro(int cantidadTesoro) {
         this.cantidadTesoro += cantidadTesoro;
     }
-    
-    public int getCantidadTesoro(){
+
+    public int getCantidadTesoro() {
         return cantidadTesoro;
     }
 
-    public boolean getAvaricioso(){
+    public boolean getAvaricioso() {
         return avaricioso;
     }
+
     //LISTENER PARA EL SLIDER
     @Override
     public void stateChanged(ChangeEvent e) {
@@ -429,11 +430,11 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                             cantidadAgentes = 2;
                         }
                     case 1:
-                        setAgente(0,1,1);
+                        setAgente(0, 1, 1);
                 }
             }
 
-            repaint();        
+            repaint();
             Thread thread = new Thread(control);
             control.setSimulacion(true);
             thread.start();
@@ -447,10 +448,13 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         if (cantidadAgentes < 1) {
             cantidadAgentes = 1;
         }
-        int [] pos = {i, j};
+        int[] pos = {i, j};
         posicionesAgentes[identificador] = new PosicionAgente(pos);
-        setAbismo(i, j, false);
-        setMonstruo(i, j, false);
+        if (matrizCuadros[i][j].isAbismo() || matrizCuadros[i][j].isMonstruo()) {
+            setAbismo(i, j, false);
+            setMonstruo(i, j, false);
+        }
+
         Agente ag = new Agente(identificador, 1, this);
         control.setAgente(ag);
     }
