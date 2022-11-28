@@ -73,7 +73,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     final JSlider sliderCantidadAgentes = new JSlider(JSlider.HORIZONTAL, 1, 4, 1);
     final JSlider sliderVelocidadAgentes = new JSlider(JSlider.HORIZONTAL, 100, 1000, 250);
     private JToggleButton iniciar;
-    
+
     //Opciones para seleccionar el modo de juego
     private final JPanel opcionesGamemode = new JPanel();
     private final JLabel gamemodes = new JLabel("Modo de juego");
@@ -136,9 +136,9 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
         opcionesObstaculo.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.MatteBorder(null),
                 javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
-        
+
         obstaculos.setFont(new Font("calibri", Font.BOLD, 30));
-        
+
         JPanel obstaculosPanel = new JPanel(new FlowLayout());
         obstaculosPanel.add(obstaculos);
         posicionarAbismo = new RadioButtonConImagen(new ImageIcon("src/monstrecaverna/modelo/abismo.png"));
@@ -152,7 +152,10 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
         opcionesObstaculo.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 0; c.gridwidth = 1; c.gridheight = 1;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 1;
+        c.gridheight = 1;
         opcionesObstaculo.add(obstaculosPanel, c);
         c.gridy = 1;
         opcionesObstaculo.add(posicionarAbismo, c);
@@ -175,7 +178,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         cantidadAgenteText = new JTextField("1");
         cantidadAgenteText.setFont(new Font("calibri", Font.BOLD, 30));
         cantidadAgenteText.setEditable(false);
-        
+
         cantidadAgenteText.setText(String.valueOf(sliderCantidadAgentes.getValue()));
         sliderCantidadAgentes.addChangeListener(this);
 
@@ -183,19 +186,19 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         iniciar.setFont(new Font("calibri", Font.BOLD, 30));
         iniciar.addItemListener(this);
 
-        
         JPanel texto_2 = new JPanel(new FlowLayout());
-        velocidadAgente = new JLabel ("Sleep agente: ");
-        velocidadAgente.setFont(new Font("calibri", Font.BOLD, 30));
+        velocidadAgente = new JLabel("Sleep agente: ");
+        velocidadAgente.setFont(new Font("calibri", Font.BOLD, 20));
         velocidadAgenteText = new JTextField("250ms");
+        velocidadAgenteText.setColumns(4);
         velocidadAgenteText.setFont(new Font("calibri", Font.BOLD, 20));
         velocidadAgenteText.setEditable(false);
-        
-        velocidadAgenteText.setText(String.valueOf(sliderVelocidadAgentes.getValue())+"ms");
+
+        velocidadAgenteText.setText(String.valueOf(sliderVelocidadAgentes.getValue()) + "ms");
         sliderVelocidadAgentes.addChangeListener(this);
 
         opcionesAgente.setLayout(new GridLayout(5, 1));
-        
+
         texto.add(cantidadAgente);
         texto.add(cantidadAgenteText);
         opcionesAgente.add(texto);
@@ -218,6 +221,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         JPanel gamemodesPanel = new JPanel(new FlowLayout());
         gamemodesPanel.add(gamemodes);
         busquedaRapida = new RadioButtonConImagen(new ImageIcon("src/monstrecaverna/modelo/tesoro.png"));
+        busquedaRapida.setSelected(true);
         busquedaAvariciosa = new RadioButtonConImagen(new ImageIcon("src/monstrecaverna/modelo/tesoros.png"));
 
         grupoBotonesGamemode = new ButtonGroup();
@@ -226,16 +230,22 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
         opcionesGamemode.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 0; c.gridwidth = 2; c.gridheight = 1;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.gridheight = 1;
         opcionesGamemode.add(gamemodesPanel, c);
-        c.gridy = 1; c.gridwidth = 1;
+        c.gridy = 1;
+        c.gridwidth = 1;
         opcionesGamemode.add(busquedaRapida, c);
-        c.gridx = 1; c.gridy = 1; c.gridwidth = 1;
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridwidth = 1;
         opcionesGamemode.add(busquedaAvariciosa, c);
-        
+
         return opcionesGamemode;
     }
-        
+
     //INICIAMOS LOS COMPONENTES DE LA VENTANA
     private void initComponents() {
 
@@ -382,7 +392,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     public void moverAgente(MovimientoAgenteWrapper movimiento) {
         directorioImagen = movimiento.getDireccion().LINKFOTO;
         int[] posicionAgente = posicionesAgentes[movimiento.getIdentificador()].getPosicionActual();
-        
+
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(false, "");
         if (matrizCuadros[posicionAgente[0]][posicionAgente[1]].isBrisa()) {
             matrizCuadros[posicionAgente[0]][posicionAgente[1]].setBrisa(true);
@@ -396,11 +406,11 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(true, directorioImagen);
         repaint();
     }
-    
-    public boolean cogerTesoro(int identificador){
+
+    public boolean cogerTesoro(int identificador) {
         Cuadro casilla = getCasilla(identificador, posicionesAgentes[identificador].getPosicionActual());
         boolean[] estado = casilla.getEstado();
-        if(estado[2]){
+        if (estado[2]) {
             casilla.setResplandor(false);
             cantidadTesoro -= 1;
             return true;
@@ -412,14 +422,15 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     public void setCantidadTesoro(int cantidadTesoro) {
         this.cantidadTesoro += cantidadTesoro;
     }
-    
-    public int getCantidadTesoro(){
+
+    public int getCantidadTesoro() {
         return cantidadTesoro;
     }
 
-    public boolean getAvaricioso(){
+    public boolean getAvaricioso() {
         return busquedaAvariciosa.getIsSelected();
     }
+
     //LISTENER PARA EL SLIDER
     @Override
     public void stateChanged(ChangeEvent e) {
@@ -430,8 +441,9 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         } else if (!src.getValueIsAdjusting() && e.getSource() == sliderCantidadAgentes) {
             cantidadAgenteText.setText(String.valueOf(src.getValue()));
             reinit();
-        } else if(!src.getValueIsAdjusting() && e.getSource() == sliderVelocidadAgentes){
-            velocidadAgenteText.setText(String.valueOf(src.getValue())+"ms");
+        } else if (!src.getValueIsAdjusting() && e.getSource() == sliderVelocidadAgentes) {
+            velocidadAgenteText.setText(String.valueOf(src.getValue()) + "ms");
+            System.out.println(velocidadAgenteText.getText());
             velocidad = src.getValue();
         }
 
@@ -488,11 +500,11 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                             cantidadAgentes = 2;
                         }
                     case 1:
-                        setAgente(0,1,1);
+                        setAgente(0, 1, 1);
                 }
             }
 
-            repaint();        
+            repaint();
             Thread thread = new Thread(control);
             control.setSimulacion(true);
             thread.start();
@@ -506,10 +518,12 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         if (cantidadAgentes < 1) {
             cantidadAgentes = 1;
         }
-        int [] pos = {i, j};
-        posicionesAgentes[0] = new PosicionAgente(pos);
-        setAbismo(i, j, false);
-        setMonstruo(i, j, false);
+        int[] pos = {i, j};
+        posicionesAgentes[identificador] = new PosicionAgente(pos);
+        if (matrizCuadros[i][j].isAbismo() || matrizCuadros[i][j].isMonstruo()) {
+            setAbismo(i, j, false);
+            setMonstruo(i, j, false);
+        }
         Agente ag = new Agente(identificador, 1, this);
         control.setAgente(ag);
     }
@@ -545,8 +559,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             matrizCuadros[i][j - 1].setHedor(b);
         }
     }
-    
-    public int getVelocidad(){
+
+    public int getVelocidad() {
         return velocidad;
     }
 }

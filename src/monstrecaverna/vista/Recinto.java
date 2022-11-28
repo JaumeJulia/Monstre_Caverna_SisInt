@@ -94,13 +94,13 @@ public class Recinto extends JPanel implements MouseListener {
                 if (vista.matrizCuadros[i][j].isAgente() || vista.matrizCuadros[i][j].isAbismo()
                         || vista.matrizCuadros[i][j].isMonstruo() || vista.matrizCuadros[i][j].isTesoro()
                         || vista.matrizCuadros[i][j].isBrisa() || vista.matrizCuadros[i][j].isHedor()) {
-                    System.out.println("Imagen en la casilla [" + i + "][" + j + "]:" + vista.matrizCuadros[i][j].getImagen());
-                    System.out.println("Estado de la casilla [" + i + "][" + j + "]: "
-                            + "\nAgente -> " + vista.matrizCuadros[i][j].isAgente()
-                            + "\nAbismo -> " + vista.matrizCuadros[i][j].isAbismo()
-                            + "\nMonstruo -> " + vista.matrizCuadros[i][j].isMonstruo()
-                            + "\nTesoro -> " + vista.matrizCuadros[i][j].isTesoro());
-                    System.out.println("Posicion absoluta de la casilla[" + i + "][" + j + "]:" + vista.matrizCuadros[i][j].getX() + "," + vista.matrizCuadros[i][j].getY());
+//                    System.out.println("Imagen en la casilla [" + i + "][" + j + "]:" + vista.matrizCuadros[i][j].getImagen());
+//                    System.out.println("Estado de la casilla [" + i + "][" + j + "]: "
+//                            + "\nAgente -> " + vista.matrizCuadros[i][j].isAgente()
+//                            + "\nAbismo -> " + vista.matrizCuadros[i][j].isAbismo()
+//                            + "\nMonstruo -> " + vista.matrizCuadros[i][j].isMonstruo()
+//                            + "\nTesoro -> " + vista.matrizCuadros[i][j].isTesoro());
+//                    System.out.println("Posicion absoluta de la casilla[" + i + "][" + j + "]:" + vista.matrizCuadros[i][j].getX() + "," + vista.matrizCuadros[i][j].getY());
                     g.drawImage(vista.matrizCuadros[i][j].getImagen(), x, y, w, h, this);
                 }
             }

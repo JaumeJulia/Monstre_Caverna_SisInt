@@ -51,5 +51,9 @@ public class RadioButtonConImagen extends JPanel {
     public boolean getIsSelected() {
         return radio.isSelected();
     }
+    
+    public void setSelected(boolean b){
+        radio.setSelected(b);
+    }
 
 }
