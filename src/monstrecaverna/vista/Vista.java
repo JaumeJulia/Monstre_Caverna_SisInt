@@ -407,8 +407,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         repaint();
     }
 
-    public boolean cogerTesoro(int identificador) {
-        Cuadro casilla = getCasilla(identificador, posicionesAgentes[identificador].getPosicionActual());
+    public boolean cogerTesoro(int identificador, Cuadro casilla) {
+        //Cuadro casilla = getCasilla(identificador, posicionesAgentes[identificador].getPosicionActual());
         boolean[] estado = casilla.getEstado();
         if (estado[2]) {
             casilla.setResplandor(false);

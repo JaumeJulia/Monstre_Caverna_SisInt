@@ -82,6 +82,15 @@ public class Agente {
         
         System.out.println("comprobacion de que se ha guardado: " + memoria.getCasilla(posicionActual).getVisitada());
         estadoCasillaActual = vista.getCasilla(identificador, posicionActual).getEstado(); //esto deberia devolver el array de booleanas que dice si hay hedor, brisa o resplandor
+        if(estadoCasillaActual[2]){
+            //coge el tesoro
+            if(vista.cogerTesoro(identificador, vista.getCasilla(identificador, posicionActual))){
+                tesoros += 1;
+            }
+            if(vista.getCantidadTesoro() == 0 || !vista.getAvaricioso()){
+                saliendo = true; //se marca como que está saliendo, por lo que solo va a buscar la casilla antecesora en lugar de seguir explorando
+            }
+        }
         if(saliendo){
             if(posicionActual[0] == 0 && posicionActual[1] == 0){
                 return null;
@@ -92,15 +101,6 @@ public class Agente {
             MovimientoAgenteWrapper maw = new MovimientoAgenteWrapper(identificador, direccion);
             return maw;
             //return direccion;//se dirige a la casilla antecesora
-        }
-        if(estadoCasillaActual[2]){
-            //coge el tesoro
-            if(vista.cogerTesoro(identificador)){
-                tesoros += 1;
-            }
-            if(vista.getCantidadTesoro() == 0 || !vista.getAvaricioso()){
-                saliendo = true; //se marca como que está saliendo, por lo que solo va a buscar la casilla antecesora en lugar de seguir explorando
-            }
         }
         Casilla[] entorno = reconocerEntorno();
         
