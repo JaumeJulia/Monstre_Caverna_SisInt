@@ -38,7 +38,7 @@ public class MapaAgente extends JPanel {
             }
             for (int i = 0; i < matrizCasillasConocidas[0].length - 1; i++) {
                 for (int j = 0; j < matrizCasillasConocidas[0].length - 1; j++) {
-                    matrizCasillasConocidas[i][j] = (Casilla) mem.memoria.get(i).get(j);
+                    matrizCasillasConocidas[j][i] = (Casilla) mem.memoria.get(i).get(j);
                 }
             }
         } catch (NullPointerException e) {
@@ -52,7 +52,7 @@ public class MapaAgente extends JPanel {
         g.drawImage(bgImage, 0, 0, null);
         for (int i = 0; i < matrizCasillasConocidas[0].length - 1; i++) {
             for (int j = 0; j < matrizCasillasConocidas[0].length - 1; j++) {
-                if (matrizCasillasConocidas[i][j] != null) {
+                if (matrizCasillasConocidas[i][j] != null && !matrizCasillasConocidas[i][j].isPared()) {
                     if (matrizCasillasConocidas[i][j].isSegura()) {
                         g.drawImage(map_seguro, (W * j) + X, (H * i) + Y, W, H, this);
                     } else if (!matrizCasillasConocidas[i][j].getConfusa()) {
@@ -60,11 +60,13 @@ public class MapaAgente extends JPanel {
                             g.drawImage(map_abismo, (W * j) + X, (H * i) + Y, W, H, this);
                         } else if (matrizCasillasConocidas[i][j].getNivelHedor() == 4) {
                             g.drawImage(map_monstruo, (W * j) + X, (H * i) + Y, W, H, this);
+                        } else {
+                            g.drawImage(map_confuso, (W * j) + X, (H * i) + Y, W, H, this);
                         }
-                    } 
-                }else {
-                        g.drawImage(map_confuso, (W * j) + X, (H * i) + Y, W, H, this);
-                    }
+                    }else {
+                            g.drawImage(map_confuso, (W * j) + X, (H * i) + Y, W, H, this);
+                        }
+                }
 
             }
         }

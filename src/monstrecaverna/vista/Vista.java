@@ -418,8 +418,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         posicionAgente[0] += movimiento.getDireccion().X;
         posicionAgente[1] += movimiento.getDireccion().Y;
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(true, directorioImagen);
-        repaint();
         ventanaMapa.repaint();
+        repaint();
     }
 
     public synchronized boolean cogerTesoro(int identificador, Cuadro casilla) {
