@@ -15,10 +15,12 @@ public class Casilla {
     private int nivelBrisa;
     private boolean pared;
     private int visitada;
+    private boolean confusa;
     
     Direcciones antecesora; //permitirá al agente recular hasta la entrada
     
     public Casilla(){
+        confusa = false;
         segura = false;
         nivelHedor = 0;
         nivelBrisa = 0;
@@ -44,6 +46,10 @@ public class Casilla {
     public void incrementaNivelHedor() {
         if(!isSegura() && nivelHedor < 4){
             this.nivelHedor += 1;
+            if(confusa){
+                this.nivelHedor += 1;
+                confusa = false;
+            }
         }
     }
 
@@ -54,6 +60,10 @@ public class Casilla {
     public void incrementaNivelBrisa() {
         if(!isSegura() && nivelBrisa < 4){
             this.nivelBrisa += 1;
+            if(confusa){
+                this.nivelBrisa += 1;
+                confusa = false;
+            }
         }
     }
 
@@ -79,5 +89,25 @@ public class Casilla {
     
     public int getVisitada(){
         return visitada;
+    }
+    
+    public void confusionMaxima(){
+        if(nivelBrisa == 0 && nivelHedor == 0){
+            confusa = true;
+        } else if(nivelBrisa != 0){
+            incrementaNivelBrisa();
+            confusa = false;
+        } else if(nivelHedor != 0){
+            incrementaNivelHedor();
+            confusa = false;
+        }
+    }
+    
+    public boolean getConfusa(){
+        return confusa;
+    }
+    
+    public void setConfusa(){
+        
     }
 }
