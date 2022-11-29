@@ -42,6 +42,7 @@ public class Control implements Runnable {
         while(vista.simulacion && !stop){
                 MovimientoAgenteWrapper movimiento = agente.moverAgente();
                 if(movimiento == null){
+                    vista.salir(agente.getIdentificador(), agente.getTesoros());
                     agente = null;
                     break;
                 }else{

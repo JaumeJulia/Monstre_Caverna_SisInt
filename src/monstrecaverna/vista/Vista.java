@@ -40,7 +40,6 @@ import monstrecaverna.modelo.PosicionAgente;
 public class Vista extends JFrame implements ChangeListener, ComponentListener, ItemListener {
 
     //Control control;
-
     private Graphics g;
     private String directorioImagen;
     BufferedImage imagen;
@@ -96,9 +95,9 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     public Vista(String nombre) {
 
         super(nombre);
-        for(int i = 0; i < controlThreads.length; i++){
+        for (int i = 0; i < controlThreads.length; i++) {
             controles[i] = new Control(this);
-        }        
+        }
         recinto = new Recinto(this);
         initComponents();
 
@@ -491,33 +490,34 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         if (estado == ItemEvent.SELECTED) {
             if (cantidadAgentes != sliderCantidadAgentes.getValue()) {
                 switch (sliderCantidadAgentes.getValue()) {
-                    case 4:
-                        matrizCuadros[matrizCuadros[1].length - 2][matrizCuadros[1].length - 2].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
-                        cantidadAgentes = 4;
-                    case 3:
-                        matrizCuadros[matrizCuadros[1].length - 2][1].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
-                        if (cantidadAgentes < 3) {
-                            cantidadAgentes = 3;
-                        }
-                        controles[3].stop();
-                    case 2:
-                        matrizCuadros[1][matrizCuadros[1].length - 2].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
-                        if (cantidadAgentes < 2) {
-                            cantidadAgentes = 2;
-                        }
-                        controles[3].stop();
-                        controles[2].stop();
                     case 1:
-                        controles[3].stop();
-                        controles[2].stop();
-                        controles[1].stop();
-                        cantidadAgentes = 1;
-                        //setAgente(0, 1, 1);
+                        if (cantidadAgentes < 1) {
+                            controles[3].stop();
+                            controles[2].stop();
+                            controles[1].stop();
+                            cantidadAgentes = 1;
+                        }break;
+                    case 2:
+                        if (cantidadAgentes < 2) {
+                            controles[3].stop();
+                            controles[2].stop();
+                            cantidadAgentes = 2;
+                        }break;
+                    case 3:
+                        if (cantidadAgentes < 3) {
+                            controles[3].stop();
+                            cantidadAgentes = 3;
+                        }break;
+                    case 4:
+                        if (cantidadAgentes < 4) {
+                            cantidadAgentes = 4;
+                        }break;
+                    //setAgente(0, 1, 1);
                 }
-            }
             
-            for(int i = 0 ; i < sliderCantidadAgentes.getValue() ; i++){
-                switch(i){
+
+            for (int i = 0; i < sliderCantidadAgentes.getValue(); i++) {
+                switch (i) {
                     case 0:
                         setAgente(i, 1, 1);
                         break;
@@ -534,13 +534,14 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                         break;
                 }
             }
+            }
             System.out.println("cantidad agentes: " + cantidadAgentes);
 
             repaint();
             //Thread thread = new Thread(control);
             simulacion = true;
             int i = 0;
-            for(Control control : controles){
+            for (Control control : controles) {
                 System.out.println("Start del agente " + i);
                 //thread.start();
                 Thread thread = new Thread(control);
@@ -606,5 +607,9 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
     public int getVelocidad() {
         return velocidad;
+    }
+    
+    public void salir(int identificador, int tesoros){
+        
     }
 }

@@ -155,4 +155,8 @@ public class Agente {
     public int getTesoros(){
         return tesoros;
     }
+    
+    public int getIdentificador(){
+        return identificador;
+    }
 }
