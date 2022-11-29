@@ -84,6 +84,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     boolean abismo = false, monstruo = false, tesoro = false;
     private int cantidadAgentes = 0, cantidadTesoro = 0, velocidad = 250;
     private PosicionAgente[] posicionesAgentes = new PosicionAgente[4];
+    public boolean simulacion;
     private boolean avaricioso;
     //private int posicionAgente[] = new int[2];
     //private PosicionAgente posicionesInicialesAgentes[] = new PosicionAgente[4];
@@ -389,7 +390,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
     }
 
-    public void moverAgente(MovimientoAgenteWrapper movimiento) {
+    public synchronized void moverAgente(MovimientoAgenteWrapper movimiento) {
         directorioImagen = movimiento.getDireccion().LINKFOTO;
         int[] posicionAgente = posicionesAgentes[movimiento.getIdentificador()].getPosicionActual();
 
@@ -407,7 +408,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         repaint();
     }
 
-    public boolean cogerTesoro(int identificador, Cuadro casilla) {
+    public synchronized boolean cogerTesoro(int identificador, Cuadro casilla) {
         //Cuadro casilla = getCasilla(identificador, posicionesAgentes[identificador].getPosicionActual());
         boolean[] estado = casilla.getEstado();
         if (estado[2]) {
@@ -506,10 +507,12 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
             repaint();
             Thread thread = new Thread(control);
-            control.setSimulacion(true);
+            simulacion = true;
+            //control.setSimulacion(true);
             thread.start();
         } else {
-            control.setSimulacion(false);
+            //control.setSimulacion(false);
+            simulacion = false;
         }
     }
 

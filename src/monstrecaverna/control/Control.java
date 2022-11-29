@@ -16,7 +16,7 @@ import monstrecaverna.vista.Vista;
 public class Control implements Runnable {
     Vista vista;
     Agente agente;
-    private boolean simulacion = false;
+    //private boolean simulacion = false;
     
     public void setAgente(Agente agente){
         this.agente = agente;
@@ -26,14 +26,9 @@ public class Control implements Runnable {
         this.vista = vista;
     }
     
-    public void setSimulacion(boolean simulacion){
-        this.simulacion = simulacion;
-        System.out.println("Simulacion: "+ simulacion);
-    }
-    
     @Override
     public void run() {
-        while(simulacion){        
+        while(vista.simulacion){        
                 vista.moverAgente(agente.moverAgente());
             try {
                 sleep(vista.getVelocidad());
