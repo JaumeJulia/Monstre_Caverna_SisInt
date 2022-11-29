@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
@@ -18,6 +20,7 @@ import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -37,9 +40,10 @@ import monstrecaverna.modelo.PosicionAgente;
  *
  * @author bertu
  */
-public class Vista extends JFrame implements ChangeListener, ComponentListener, ItemListener {
+public class Vista extends JFrame implements ChangeListener, ComponentListener, ItemListener, ActionListener {
 
     Control control;
+    JFrame ventanaMapa = new JFrame("Mapa del agente");
 
     private Graphics g;
     private String directorioImagen;
@@ -72,7 +76,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     private JTextField cantidadAgenteText, velocidadAgenteText;
     final JSlider sliderCantidadAgentes = new JSlider(JSlider.HORIZONTAL, 1, 4, 1);
     final JSlider sliderVelocidadAgentes = new JSlider(JSlider.HORIZONTAL, 100, 1000, 250);
-    private JToggleButton iniciar;
+    public JToggleButton iniciar;
+    public JButton verMapa = new JButton("Ver mapa");
 
     //Opciones para seleccionar el modo de juego
     private final JPanel opcionesGamemode = new JPanel();
@@ -108,6 +113,11 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        ventanaMapa.setPreferredSize(new Dimension((int) 512, (int) 532));
+        ventanaMapa.pack();
+        ventanaMapa.setLocationRelativeTo(null);
+        ventanaMapa.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
     }
 
@@ -187,6 +197,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         iniciar.setFont(new Font("calibri", Font.BOLD, 30));
         iniciar.addItemListener(this);
 
+        verMapa.addActionListener(this);
+
         JPanel texto_2 = new JPanel(new FlowLayout());
         velocidadAgente = new JLabel("Sleep agente: ");
         velocidadAgente.setFont(new Font("calibri", Font.BOLD, 20));
@@ -198,13 +210,14 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         velocidadAgenteText.setText(String.valueOf(sliderVelocidadAgentes.getValue()) + "ms");
         sliderVelocidadAgentes.addChangeListener(this);
 
-        opcionesAgente.setLayout(new GridLayout(5, 1));
+        opcionesAgente.setLayout(new GridLayout(6, 1));
 
         texto.add(cantidadAgente);
         texto.add(cantidadAgenteText);
         opcionesAgente.add(texto);
         opcionesAgente.add(sliderCantidadAgentes);
         opcionesAgente.add(iniciar);
+        opcionesAgente.add(verMapa);
         texto_2.add(velocidadAgente);
         texto_2.add(velocidadAgenteText);
         opcionesAgente.add(texto_2);
@@ -406,6 +419,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         posicionAgente[1] += movimiento.getDireccion().Y;
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(true, directorioImagen);
         repaint();
+        ventanaMapa.repaint();
     }
 
     public synchronized boolean cogerTesoro(int identificador, Cuadro casilla) {
@@ -479,8 +493,6 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         return matrizCuadros[a[0] + posicionInicialAgente[0]][a[1] + posicionInicialAgente[1]];
     }
 
-    //LISTENER PARA CUANDO SE PULSA EL CLICK DEL RATON. CON ESTE METODO CAMBIAMOS
-    //LOS ESTADOS DE pared Y agente DE LAS CASILLAS DE LA MATRIZ
     @Override
     public void itemStateChanged(ItemEvent e) {
         int estado = e.getStateChange();
@@ -529,6 +541,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         }
         Agente ag = new Agente(identificador, 1, this);
         control.setAgente(ag);
+        ventanaMapa.add(ag.getMapaAgente());
     }
 
     public void setAbismo(int i, int j, boolean b) {
@@ -565,5 +578,12 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
 
     public int getVelocidad() {
         return velocidad;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == verMapa) {
+            ventanaMapa.setVisible(true);
+        }
     }
 }

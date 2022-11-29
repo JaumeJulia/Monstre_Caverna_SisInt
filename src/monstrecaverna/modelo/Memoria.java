@@ -14,7 +14,7 @@ import java.util.HashMap;
  */
 public class Memoria {
     
-    private HashMap<Integer, HashMap> memoria = new HashMap<>(); //No, no puede ser final, netbeans es estúpido. Si fuese final, no podriamos ampliar el hashmap nunca
+    public HashMap<Integer, HashMap> memoria = new HashMap<>(); //No, no puede ser final, netbeans es estúpido. Si fuese final, no podriamos ampliar el hashmap nunca
     
     public Memoria(int[] posicion){
         Casilla casilla = ampliaMemoria(posicion);

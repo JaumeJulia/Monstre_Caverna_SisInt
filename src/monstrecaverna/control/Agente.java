@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Random;
 import monstrecaverna.modelo.Casilla;
 import monstrecaverna.modelo.Direcciones;
+import monstrecaverna.modelo.MapaAgente;
 import monstrecaverna.modelo.Memoria;
 import monstrecaverna.modelo.MovimientoAgenteWrapper;
 import monstrecaverna.vista.Vista;
@@ -29,6 +30,7 @@ public class Agente {
     private boolean saliendo;
     private final int identificador;
     private int tesoros;
+    private MapaAgente ma;
     
     public Agente(int identificador, int rotacion, Vista vista){
         this.identificador = identificador;
@@ -41,6 +43,7 @@ public class Agente {
         this.vista = vista;
         saliendo = false;
         tesoros = 0;
+        ma = new MapaAgente();
     }
     
     private Casilla[] reconocerEntorno(){
@@ -128,6 +131,7 @@ public class Agente {
         }
         System.out.println("Me dirijo al:" + direcciones[direccionActual].toString());
         System.out.println("------------------------ LISTO! ------------------------");
+        ma.actualizaMapa(memoria);
         MovimientoAgenteWrapper maw = new MovimientoAgenteWrapper(identificador, direcciones[direccionActual]);
         return maw;
         //return direcciones[direccionActual];
@@ -154,5 +158,9 @@ public class Agente {
     
     public int getTesoros(){
         return tesoros;
+    }
+    
+    public MapaAgente getMapaAgente(){
+        return this.ma;
     }
 }
