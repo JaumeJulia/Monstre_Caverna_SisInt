@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -193,5 +194,20 @@ public class Recinto extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e
     ) {
+    }
+
+    public void actualizaNumeroTesoros(int identificador, int[] pos, JLabel cantidadTesoros) {
+        int x = vista.matrizCuadros[pos[0]][pos[1]].getX();
+        int y = vista.matrizCuadros[pos[0]][pos[1]].getY();
+        int w = vista.matrizCuadros[pos[0]][pos[1]].getWidth();
+        int h = vista.matrizCuadros[pos[0]][pos[1]].getHeight();
+        cantidadTesoros.setBounds(x+w/3, y, w, h);
+        try {
+            this.remove(this.getComponentAt(x+w/3, y));
+            this.repaint();
+        } catch (Exception e) {
+            System.out.println("");
+        }
+        this.add(cantidadTesoros);
     }
 }
