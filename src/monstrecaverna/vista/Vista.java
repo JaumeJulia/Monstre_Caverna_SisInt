@@ -1,6 +1,5 @@
 package monstrecaverna.vista;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -433,13 +432,6 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         if (estado[2]) {
             casilla.setResplandor(false);
             cantidadTesoro -= 1;
-            if (getAvaricioso()) {
-                int[] pos = posicionesAgentes[identificador].getPosicionInicial();
-                JLabel cantidadTesoros = new JLabel(String.valueOf(controles[identificador].cantidadTesorosObtenidos() + 1));
-                cantidadTesoros.setFont(new Font("calibri", Font.BOLD, 30));
-                cantidadTesoros.setForeground(Color.GREEN);
-                recinto.actualizaNumeroTesoros(identificador, pos, cantidadTesoros);
-            }
             return true;
         } else {
             return false;
@@ -517,46 +509,42 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                             controles[2].stop();
                             controles[1].stop();
                             cantidadAgentes = 1;
-                        }
-                        break;
+                        }break;
                     case 2:
                         if (cantidadAgentes < 2) {
                             controles[3].stop();
                             controles[2].stop();
                             cantidadAgentes = 2;
-                        }
-                        break;
+                        }break;
                     case 3:
                         if (cantidadAgentes < 3) {
                             controles[3].stop();
                             cantidadAgentes = 3;
-                        }
-                        break;
+                        }break;
                     case 4:
                         if (cantidadAgentes < 4) {
                             cantidadAgentes = 4;
-                        }
-                        break;
+                        }break;
                     //setAgente(0, 1, 1);
                 }
+            
 
-                for (int i = 0; i < sliderCantidadAgentes.getValue(); i++) {
-                    switch (i) {
-                        case 0:
-                            setAgente(i, 1, 1);
-                            break;
-                        case 1:
-                            setAgente(i, 1, matrizCuadros[1].length - 2);
-                            break;
-                        case 2:
-                            setAgente(i, matrizCuadros[1].length - 2, 1);
-                            break;
-                        case 3:
-                            setAgente(i, matrizCuadros[1].length - 2, matrizCuadros[1].length - 2);
-                            break;
-                        default:
-                            break;
-                    }
+            for (int i = 0; i < sliderCantidadAgentes.getValue(); i++) {
+                switch (i) {
+                    case 0:
+                        setAgente(i, 1, 1);
+                        break;
+                    case 1:
+                        setAgente(i, 1, matrizCuadros[1].length - 2);
+                        break;
+                    case 2:
+                        setAgente(i, matrizCuadros[1].length - 2, 1);
+                        break;
+                    case 3:
+                        setAgente(i, matrizCuadros[1].length - 2, matrizCuadros[1].length - 2);
+                        break;
+                    default:
+                        break;
                 }
             }
             }
@@ -634,34 +622,22 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     public int getVelocidad() {
         return velocidad;
     }
-
-    public synchronized void salir(int identificador, int tesoros) {
+    
+    public synchronized void salir(int identificador, int tesoros){
         int[] posicionInicial = posicionesAgentes[identificador].getPosicionInicial();
         matrizCuadros[posicionInicial[0]][posicionInicial[1]].setAgente(false, "");
-        if (!getAvaricioso()) {
+        if(getAvaricioso()){
             //poner el número de tesoros en la casilla de salida del agente
-            if (tesoros == 0) {
-                JLabel cantidadTesoros = new JLabel("0");
-                cantidadTesoros.setFont(new Font("calibri", Font.BOLD, 30));
-                cantidadTesoros.setForeground(Color.GREEN);
-                recinto.actualizaNumeroTesoros(identificador, posicionInicial, cantidadTesoros);
+        } else {
+            if(tesoros == 0){
                 //un cerapio por lento
-            } else {
+            } else{
                 posicionLlegada += 1;
-                JLabel cantidadTesoros = new JLabel(String.valueOf(posicionLlegada)+"º");
-                cantidadTesoros.setFont(new Font("calibri", Font.BOLD, 30));
-                cantidadTesoros.setForeground(Color.GREEN);
-                recinto.actualizaNumeroTesoros(identificador, posicionInicial, cantidadTesoros);
                 //poner el orden de llegada
             }
         }
         repaint();
-    }
-
-    public void setHedor(int identificador, int[] posicion) {
-        getCasilla(identificador, posicion).setHedor(true);
-        repaint();
-    }
+    }        
 
     @Override
     public void actionPerformed(ActionEvent ae) {

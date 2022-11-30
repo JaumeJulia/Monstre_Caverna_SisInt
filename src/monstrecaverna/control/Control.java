@@ -29,9 +29,6 @@ public class Control implements Runnable {
         stop = false;
     }
     
-    public int cantidadTesorosObtenidos(){
-        return this.agente.getTesoros();
-    }
 //    public void setVista(Vista vista){
 //        this.vista = vista;
 //    }

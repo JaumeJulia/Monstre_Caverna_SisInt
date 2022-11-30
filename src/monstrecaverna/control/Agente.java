@@ -30,7 +30,7 @@ public class Agente {
     private boolean saliendo;
     private final int identificador;
     private int tesoros;
-    private int señuelo = 1;
+    //private MapaAgente ma;
     
     public Agente(int identificador, int rotacion, Vista vista){
         this.identificador = identificador;
@@ -43,6 +43,7 @@ public class Agente {
         this.vista = vista;
         saliendo = false;
         tesoros = 0;
+        //ma = new MapaAgente();
     }
     
     private Casilla[] reconocerEntorno(){
@@ -90,13 +91,6 @@ public class Agente {
         
         //System.out.println("comprobacion de que se ha guardado: " + memoria.getCasilla(posicionActual).getVisitada());
         estadoCasillaActual = vista.getCasilla(identificador, posicionActual).getEstado(); //esto deberia devolver el array de booleanas que dice si hay hedor, brisa o resplandor
-        Random ran = new Random();
-        if(señuelo > 0 && !estadoCasillaActual[0] && !estadoCasillaActual[1]){
-            if(ran.nextInt(100) > 95){
-                vista.setHedor(identificador, posicionActual);
-                señuelo -= 1;
-            }
-        }
         if(estadoCasillaActual[2]){
             //coge el tesoro
             if(vista.cogerTesoro(identificador, vista.getCasilla(identificador, posicionActual))){
