@@ -42,7 +42,6 @@ import monstrecaverna.modelo.PosicionAgente;
  */
 public class Vista extends JFrame implements ChangeListener, ComponentListener, ItemListener, ActionListener {
 
-    Control control;
     JFrame ventanaMapa = new JFrame("Mapa del agente");
 
     private Graphics g;
@@ -90,16 +89,21 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     private int cantidadAgentes = 0, cantidadTesoro = 0, velocidad = 250;
     private PosicionAgente[] posicionesAgentes = new PosicionAgente[4];
     public boolean simulacion;
+    private Thread[] controlThreads = new Thread[4];
+    private Control[] controles = new Control[4];
+    private int posicionLlegada = 0;
     private boolean avaricioso;
     //private int posicionAgente[] = new int[2];
     //private PosicionAgente posicionesInicialesAgentes[] = new PosicionAgente[4];
     //private int posicionInicialAgente[] = new int[2];
 
     //CONSTRUCTOR DE VISTA
-    public Vista(String nombre, Control control) {
+    public Vista(String nombre) {
 
         super(nombre);
-        this.control = control;
+        for (int i = 0; i < controlThreads.length; i++) {
+            controles[i] = new Control(this);
+        }
         recinto = new Recinto(this);
         initComponents();
 
@@ -499,29 +503,67 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         if (estado == ItemEvent.SELECTED) {
             if (cantidadAgentes != sliderCantidadAgentes.getValue()) {
                 switch (sliderCantidadAgentes.getValue()) {
-                    case 4:
-                        matrizCuadros[matrizCuadros[1].length - 2][matrizCuadros[1].length - 2].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
-                        cantidadAgentes = 4;
-                    case 3:
-                        matrizCuadros[matrizCuadros[1].length - 2][1].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
-                        if (cantidadAgentes < 3) {
-                            cantidadAgentes = 3;
-                        }
-                    case 2:
-                        matrizCuadros[1][matrizCuadros[1].length - 2].setAgente(true, "src/monstrecaverna/modelo/amogus_OESTE.png");
-                        if (cantidadAgentes < 2) {
-                            cantidadAgentes = 2;
-                        }
                     case 1:
-                        setAgente(0, 1, 1);
+                        if (cantidadAgentes < 1) {
+                            controles[3].stop();
+                            controles[2].stop();
+                            controles[1].stop();
+                            cantidadAgentes = 1;
+                        }break;
+                    case 2:
+                        if (cantidadAgentes < 2) {
+                            controles[3].stop();
+                            controles[2].stop();
+                            cantidadAgentes = 2;
+                        }break;
+                    case 3:
+                        if (cantidadAgentes < 3) {
+                            controles[3].stop();
+                            cantidadAgentes = 3;
+                        }break;
+                    case 4:
+                        if (cantidadAgentes < 4) {
+                            cantidadAgentes = 4;
+                        }break;
+                    //setAgente(0, 1, 1);
+                }
+            
+
+            for (int i = 0; i < sliderCantidadAgentes.getValue(); i++) {
+                switch (i) {
+                    case 0:
+                        setAgente(i, 1, 1);
+                        break;
+                    case 1:
+                        setAgente(i, 1, matrizCuadros[1].length - 2);
+                        break;
+                    case 2:
+                        setAgente(i, matrizCuadros[1].length - 2, 1);
+                        break;
+                    case 3:
+                        setAgente(i, matrizCuadros[1].length - 2, matrizCuadros[1].length - 2);
+                        break;
+                    default:
+                        break;
                 }
             }
+            }
+            System.out.println("cantidad agentes: " + cantidadAgentes);
 
             repaint();
-            Thread thread = new Thread(control);
+            //Thread thread = new Thread(control);
             simulacion = true;
+            int i = 0;
+            for (Control control : controles) {
+                System.out.println("Start del agente " + i);
+                //thread.start();
+                Thread thread = new Thread(control);
+                controlThreads[i] = thread;
+                thread.start();
+                i++;
+            }
             //control.setSimulacion(true);
-            thread.start();
+            //thread.start();
         } else {
             //control.setSimulacion(false);
             simulacion = false;
@@ -539,8 +581,9 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             setAbismo(i, j, false);
             setMonstruo(i, j, false);
         }
+        System.out.println("Agente creado " + identificador);
         Agente ag = new Agente(identificador, 1, this);
-        control.setAgente(ag);
+        controles[identificador].setAgente(ag);
         ventanaMapa.add(ag.getMapaAgente());
     }
 
@@ -579,6 +622,18 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     public int getVelocidad() {
         return velocidad;
     }
+    
+    public synchronized void salir(int identificador, int tesoros){
+        int[] posicionInicial = posicionesAgentes[identificador].getPosicionInicial();
+        matrizCuadros[posicionInicial[0]][posicionInicial[1]].setAgente(false, "");
+        if(getAvaricioso()){
+            //poner el número de tesoros en la casilla de salida del agente
+        } else {
+            posicionLlegada += 1;
+            //poner el orden de llegada
+        }
+        repaint();
+    }        
 
     @Override
     public void actionPerformed(ActionEvent ae) {

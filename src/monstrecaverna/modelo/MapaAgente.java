@@ -56,9 +56,9 @@ public class MapaAgente extends JPanel {
                     if (matrizCasillasConocidas[i][j].isSegura()) {
                         g.drawImage(map_seguro, (W * j) + X, (H * i) + Y, W, H, this);
                     } else if (!matrizCasillasConocidas[i][j].getConfusa()) {
-                        if (matrizCasillasConocidas[i][j].getNivelBrisa() == 4) {
+                        if (matrizCasillasConocidas[i][j].getNivelBrisa() >= 3) {
                             g.drawImage(map_abismo, (W * j) + X, (H * i) + Y, W, H, this);
-                        } else if (matrizCasillasConocidas[i][j].getNivelHedor() == 4) {
+                        } else if (matrizCasillasConocidas[i][j].getNivelHedor() >= 3) {
                             g.drawImage(map_monstruo, (W * j) + X, (H * i) + Y, W, H, this);
                         } else {
                             g.drawImage(map_confuso, (W * j) + X, (H * i) + Y, W, H, this);
