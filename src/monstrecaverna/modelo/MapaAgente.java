@@ -25,15 +25,11 @@ public class MapaAgente extends JPanel {
     //Casilla[][] matrizCasillasConocidas;
     NodoCasilla nodosAbiertos;
     int X = 22, Y = 47, W = 28, H = 30;
-    
-    public MapaAgente(){
-        nodosAbiertos = new NodoCasilla();
-    }
 
     public void actualizaMapa(Casilla[] casillas, int[] posiciones){
         int i = 0;
         int aux = 0;
-        if(nodosAbiertos.getCasilla() == null){
+        if(nodosAbiertos == null){
             nodosAbiertos = new NodoCasilla(casillas[0], posiciones[0], posiciones[1]);
             i++;
             aux += 2;
@@ -85,7 +81,7 @@ public class MapaAgente extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(bgImage, 0, 0, null);
-        NodoCasilla nodoCasilla = nodosAbiertos;
+        NodoCasilla nodoCasilla = this.nodosAbiertos;
         while(nodoCasilla != null){
             int i = nodoCasilla.getPosicion()[0];
             int j = nodoCasilla.getPosicion()[1];
