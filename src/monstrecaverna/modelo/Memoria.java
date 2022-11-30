@@ -14,14 +14,20 @@ import java.util.HashMap;
  */
 public class Memoria {
     
-    public HashMap<Integer, HashMap> memoria = new HashMap<>(); //No, no puede ser final, netbeans es estúpido. Si fuese final, no podriamos ampliar el hashmap nunca
+    private HashMap<Integer, HashMap> memoria = new HashMap<>(); //No, no puede ser final, netbeans es estúpido. Si fuese final, no podriamos ampliar el hashmap nunca
+    private MapaAgente mapaAgente;
     
     public Memoria(int[] posicion){
         Casilla casilla = ampliaMemoria(posicion);
         casilla.setSegura();
+        mapaAgente = new MapaAgente();
     }
     
-    public void defineEntorno(Casilla[] entorno, boolean[] estado){ //define el nivel de peligrosidad de las casillas de su entorno basandose en la información extraída de la casilla que está ocupando
+    public MapaAgente getMapa(){
+        return mapaAgente;
+    }
+    
+    public void defineEntorno(Casilla[] entorno, boolean[] estado, int[] posicionesDescubiertas){ //define el nivel de peligrosidad de las casillas de su entorno basandose en la información extraída de la casilla que está ocupando
         if(estado[0]){ //La casilla ocupada es totalmente SEGURA
             for(Casilla casilla : entorno){
                 casilla.setSegura();
@@ -51,10 +57,11 @@ public class Memoria {
                 }
             }
         }
+        mapaAgente.actualizaMapa(entorno, posicionesDescubiertas);
     }
     
     public void recuerda(int[] posicionActual, Direcciones direccion){ //Recuerda el camino SEGURO de vuelta
-        System.out.println("La antecesora de " + Arrays.toString(posicionActual) + "Se encuentra hacia el " + direccion.toString());
+        //System.out.println("La antecesora de " + Arrays.toString(posicionActual) + "Se encuentra hacia el " + direccion.toString());
         Casilla casillaOcupada = getCasilla(posicionActual);
         casillaOcupada.setAntecesora(direccion);
     }
@@ -67,20 +74,20 @@ public class Memoria {
     }
     
     public Casilla getCasilla(int[] posicion){ //Para mirar la casilla ocupada
-        System.out.println("Recordando la casilla " + Arrays.toString(posicion));
+        //System.out.println("Recordando la casilla " + Arrays.toString(posicion));
         HashMap <Integer, Casilla> memoriaAux = memoria.get(posicion[0]);
         Casilla casilla;
         if(memoriaAux != null){
-            System.out.println("Existe");
+            //System.out.println("Existe");
             casilla = memoriaAux.get(posicion[1]);
             if(casilla == null){
-                System.out.println("No existe");
+                //System.out.println("No existe");
                 casilla = new Casilla();
                 memoriaAux.put(posicion[1], casilla);
                 //casilla = ampliaMemoria(posicion);
             }
         } else {
-            System.out.println("No existe");
+            //System.out.println("No existe");
             casilla = ampliaMemoria(posicion);
         }
         return casilla;

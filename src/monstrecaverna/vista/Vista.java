@@ -423,7 +423,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         posicionAgente[0] += movimiento.getDireccion().X;
         posicionAgente[1] += movimiento.getDireccion().Y;
         matrizCuadros[posicionAgente[0]][posicionAgente[1]].setAgente(true, directorioImagen);
-        ventanaMapa.repaint();
+        //ventanaMapa.repaint();
         repaint();
     }
 
@@ -470,7 +470,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             reinit();
         } else if (!src.getValueIsAdjusting() && e.getSource() == sliderVelocidadAgentes) {
             velocidadAgenteText.setText(String.valueOf(src.getValue()) + "ms");
-            System.out.println(velocidadAgenteText.getText());
+            //System.out.println(velocidadAgenteText.getText());
             velocidad = src.getValue();
         }
 
@@ -500,8 +500,8 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     //METODO QUE DEVUELVE EL CUADRO INDICADO POR a[]
     public Cuadro getCasilla(int id, int[] a) {
         int[] posicionInicialAgente = posicionesAgentes[id].getPosicionInicial();
-        int resultadoAbsoluto[] = {a[0] + posicionInicialAgente[0], a[1] + posicionInicialAgente[1]};
-        System.out.println("Resultado absoluto: " + Arrays.toString(resultadoAbsoluto));
+        //int resultadoAbsoluto[] = {a[0] + posicionInicialAgente[0], a[1] + posicionInicialAgente[1]};
+        //System.out.println("Resultado absoluto: " + Arrays.toString(resultadoAbsoluto));
         return matrizCuadros[a[0] + posicionInicialAgente[0]][a[1] + posicionInicialAgente[1]];
     }
 
@@ -559,14 +559,14 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                     }
                 }
             }
-            System.out.println("cantidad agentes: " + cantidadAgentes);
+            //System.out.println("cantidad agentes: " + cantidadAgentes);
 
             repaint();
             //Thread thread = new Thread(control);
             simulacion = true;
             int i = 0;
             for (Control control : controles) {
-                System.out.println("Start del agente " + i);
+                //System.out.println("Start del agente " + i);
                 //thread.start();
                 Thread thread = new Thread(control);
                 controlThreads[i] = thread;
@@ -592,7 +592,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             setAbismo(i, j, false);
             setMonstruo(i, j, false);
         }
-        System.out.println("Agente creado " + identificador);
+        //System.out.println("Agente creado " + identificador);
         Agente ag = new Agente(identificador, 1, this);
         controles[identificador].setAgente(ag);
         ventanaMapa.add(ag.getMapaAgente());
