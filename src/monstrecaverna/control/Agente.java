@@ -30,7 +30,7 @@ public class Agente {
     private boolean saliendo;
     private final int identificador;
     private int tesoros;
-    private MapaAgente ma;
+    //private MapaAgente ma;
     
     public Agente(int identificador, int rotacion, Vista vista){
         this.identificador = identificador;
@@ -43,7 +43,7 @@ public class Agente {
         this.vista = vista;
         saliendo = false;
         tesoros = 0;
-        ma = new MapaAgente();
+        //ma = new MapaAgente();
     }
     
     private Casilla[] reconocerEntorno(){
@@ -171,6 +171,6 @@ public class Agente {
     }
     
     public MapaAgente getMapaAgente(){
-        return this.ma;
+        return this.memoria.getMapa();
     }
 }

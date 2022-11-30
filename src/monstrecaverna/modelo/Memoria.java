@@ -23,6 +23,10 @@ public class Memoria {
         mapaAgente = new MapaAgente();
     }
     
+    public MapaAgente getMapa(){
+        return mapaAgente;
+    }
+    
     public void defineEntorno(Casilla[] entorno, boolean[] estado, int[] posicionesDescubiertas){ //define el nivel de peligrosidad de las casillas de su entorno basandose en la información extraída de la casilla que está ocupando
         if(estado[0]){ //La casilla ocupada es totalmente SEGURA
             for(Casilla casilla : entorno){

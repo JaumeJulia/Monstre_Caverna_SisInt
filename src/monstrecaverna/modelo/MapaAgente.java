@@ -24,8 +24,12 @@ public class MapaAgente extends JPanel {
     Image map_agente = Toolkit.getDefaultToolkit().createImage("src/monstrecaverna/modelo/amogus_ESTE.png");
     //Casilla[][] matrizCasillasConocidas;
     NodoCasilla nodosAbiertos;
-    int X = 22, Y = 47, W = 28, H = 30;
-
+    int X = 24 * 9, Y = 47 * 6, W = 28, H = 30;
+    
+    public NodoCasilla getNodosAbiertos(){
+        return nodosAbiertos;
+    }
+    
     public void actualizaMapa(Casilla[] casillas, int[] posiciones){
         int i = 0;
         int aux = 0;
@@ -81,14 +85,14 @@ public class MapaAgente extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(bgImage, 0, 0, null);
-        NodoCasilla nodoCasilla = this.nodosAbiertos;
+        NodoCasilla nodoCasilla = getNodosAbiertos();
         while(nodoCasilla != null){
-            int i = nodoCasilla.getPosicion()[0];
-            int j = nodoCasilla.getPosicion()[1];
+            int j = nodoCasilla.getPosicion()[0];
+            int i = nodoCasilla.getPosicion()[1];
             if(!nodoCasilla.getCasilla().isPared()){
                 if(nodoCasilla.getCasilla().isSegura()){
                    g.drawImage(map_seguro, (W * j) + X, (H * i) + Y, W, H, this); 
-                } else if(nodoCasilla.getCasilla().getConfusa()){
+                } else if(!nodoCasilla.getCasilla().getConfusa()){
                     if (nodoCasilla.getCasilla().getNivelBrisa() >= 3) {
                         g.drawImage(map_abismo, (W * j) + X, (H * i) + Y, W, H, this);
                     } else if (nodoCasilla.getCasilla().getNivelHedor() >= 3) {
