@@ -637,7 +637,12 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
             }
         }
         repaint();
-    }        
+    }
+    
+    public void setHedor(int identificador, int[] posicion){
+        getCasilla(identificador, posicion).setHedor(true);
+        repaint();
+    }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
