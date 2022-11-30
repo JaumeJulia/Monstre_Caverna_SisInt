@@ -14,13 +14,13 @@ import monstrecaverna.vista.Vista;
  */
 public class MonstreCaverna {
     
-    private Control control;
+    //private Control control;
     private Vista vista;
     
     public MonstreCaverna(){
-        this.control = new Control();
-        this.vista = new Vista("Cueva del monstruo", control);
-        control.setVista(vista);
+        //this.control = new Control();
+        this.vista = new Vista("Cueva del monstruo");
+        //control.setVista(vista);
         
         this.vista.mostrar();
         

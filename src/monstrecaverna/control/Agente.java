@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Random;
 import monstrecaverna.modelo.Casilla;
 import monstrecaverna.modelo.Direcciones;
+import monstrecaverna.modelo.MapaAgente;
 import monstrecaverna.modelo.Memoria;
 import monstrecaverna.modelo.MovimientoAgenteWrapper;
 import monstrecaverna.vista.Vista;
@@ -29,6 +30,7 @@ public class Agente {
     private boolean saliendo;
     private final int identificador;
     private int tesoros;
+    private MapaAgente ma;
     
     public Agente(int identificador, int rotacion, Vista vista){
         this.identificador = identificador;
@@ -41,6 +43,7 @@ public class Agente {
         this.vista = vista;
         saliendo = false;
         tesoros = 0;
+        ma = new MapaAgente();
     }
     
     private Casilla[] reconocerEntorno(){
@@ -82,6 +85,15 @@ public class Agente {
         
         System.out.println("comprobacion de que se ha guardado: " + memoria.getCasilla(posicionActual).getVisitada());
         estadoCasillaActual = vista.getCasilla(identificador, posicionActual).getEstado(); //esto deberia devolver el array de booleanas que dice si hay hedor, brisa o resplandor
+        if(estadoCasillaActual[2]){
+            //coge el tesoro
+            if(vista.cogerTesoro(identificador, vista.getCasilla(identificador, posicionActual))){
+                tesoros += 1;
+            }
+            if(vista.getCantidadTesoro() == 0 || !vista.getAvaricioso()){
+                saliendo = true; //se marca como que está saliendo, por lo que solo va a buscar la casilla antecesora en lugar de seguir explorando
+            }
+        }
         if(saliendo){
             if(posicionActual[0] == 0 && posicionActual[1] == 0){
                 return null;
@@ -92,15 +104,6 @@ public class Agente {
             MovimientoAgenteWrapper maw = new MovimientoAgenteWrapper(identificador, direccion);
             return maw;
             //return direccion;//se dirige a la casilla antecesora
-        }
-        if(estadoCasillaActual[2]){
-            //coge el tesoro
-            if(vista.cogerTesoro(identificador)){
-                tesoros += 1;
-            }
-            if(vista.getCantidadTesoro() == 0 || !vista.getAvaricioso()){
-                saliendo = true; //se marca como que está saliendo, por lo que solo va a buscar la casilla antecesora en lugar de seguir explorando
-            }
         }
         Casilla[] entorno = reconocerEntorno();
         
@@ -128,6 +131,7 @@ public class Agente {
         }
         System.out.println("Me dirijo al:" + direcciones[direccionActual].toString());
         System.out.println("------------------------ LISTO! ------------------------");
+        //ma.actualizaMapa(memoria);
         MovimientoAgenteWrapper maw = new MovimientoAgenteWrapper(identificador, direcciones[direccionActual]);
         return maw;
         //return direcciones[direccionActual];
@@ -154,5 +158,13 @@ public class Agente {
     
     public int getTesoros(){
         return tesoros;
+    }
+    
+    public int getIdentificador(){
+        return identificador;
+    }
+    
+    public MapaAgente getMapaAgente(){
+        return this.ma;
     }
 }
