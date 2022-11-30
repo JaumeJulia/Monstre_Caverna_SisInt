@@ -629,8 +629,12 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         if(getAvaricioso()){
             //poner el número de tesoros en la casilla de salida del agente
         } else {
-            posicionLlegada += 1;
-            //poner el orden de llegada
+            if(tesoros == 0){
+                //un cerapio por lento
+            } else{
+                posicionLlegada += 1;
+                //poner el orden de llegada
+            }
         }
         repaint();
     }        
