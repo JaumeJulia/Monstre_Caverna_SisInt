@@ -24,10 +24,24 @@ public class MapaAgente extends JPanel {
     Image map_agente = Toolkit.getDefaultToolkit().createImage("src/monstrecaverna/modelo/amogus_ESTE.png");
     //Casilla[][] matrizCasillasConocidas;
     NodoCasilla nodosAbiertos;
-    int X = 24 * 9, Y = 47 * 6, W = 28, H = 30;
+    int X = 27 * 9, Y = 28 * 6, W = 28, H = 30;
+    int limiteEste = 480, limiteSur = 500, limiteNorte = 28, limiteOeste = 27;
+    
     
     public NodoCasilla getNodosAbiertos(){
         return nodosAbiertos;
+    }
+    
+    public void setX(int X){
+        this.X = X;
+        System.out.println("***********************************************************************************************");
+        System.out.println("X ahora vale " + this.X);
+    }
+    
+    public void setY(int Y){
+        this.Y = Y;
+        System.out.println("***********************************************************************************************");
+        System.out.println("Y ahora vale " + this.Y);
     }
     
     public void actualizaMapa(Casilla[] casillas, int[] posiciones){
@@ -105,6 +119,16 @@ public class MapaAgente extends JPanel {
                 }
             }
             nodoCasilla = nodoCasilla.getNextNodo();
+            if((W * j) + X  >= limiteEste){
+                setX(X - limiteOeste);
+            } else if((W * j + X) <= limiteOeste){
+                setX(X + limiteOeste);
+            }
+            if((H * i + Y) >= limiteSur){                
+                setY(Y - limiteNorte);
+            } else if((H * i + Y)<= limiteNorte){                
+                setY(Y + limiteNorte);
+            }
         }
         
         

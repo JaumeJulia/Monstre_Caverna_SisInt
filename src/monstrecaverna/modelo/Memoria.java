@@ -61,7 +61,7 @@ public class Memoria {
     }
     
     public void recuerda(int[] posicionActual, Direcciones direccion){ //Recuerda el camino SEGURO de vuelta
-        System.out.println("La antecesora de " + Arrays.toString(posicionActual) + "Se encuentra hacia el " + direccion.toString());
+        //System.out.println("La antecesora de " + Arrays.toString(posicionActual) + "Se encuentra hacia el " + direccion.toString());
         Casilla casillaOcupada = getCasilla(posicionActual);
         casillaOcupada.setAntecesora(direccion);
     }
@@ -74,20 +74,20 @@ public class Memoria {
     }
     
     public Casilla getCasilla(int[] posicion){ //Para mirar la casilla ocupada
-        System.out.println("Recordando la casilla " + Arrays.toString(posicion));
+        //System.out.println("Recordando la casilla " + Arrays.toString(posicion));
         HashMap <Integer, Casilla> memoriaAux = memoria.get(posicion[0]);
         Casilla casilla;
         if(memoriaAux != null){
-            System.out.println("Existe");
+            //System.out.println("Existe");
             casilla = memoriaAux.get(posicion[1]);
             if(casilla == null){
-                System.out.println("No existe");
+                //System.out.println("No existe");
                 casilla = new Casilla();
                 memoriaAux.put(posicion[1], casilla);
                 //casilla = ampliaMemoria(posicion);
             }
         } else {
-            System.out.println("No existe");
+            //System.out.println("No existe");
             casilla = ampliaMemoria(posicion);
         }
         return casilla;
