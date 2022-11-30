@@ -559,7 +559,6 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                     }
                 }
             }
-            }
             //System.out.println("cantidad agentes: " + cantidadAgentes);
 
             repaint();
