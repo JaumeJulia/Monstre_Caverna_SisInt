@@ -131,7 +131,7 @@ public class Agente {
         }
         System.out.println("Me dirijo al:" + direcciones[direccionActual].toString());
         System.out.println("------------------------ LISTO! ------------------------");
-        ma.actualizaMapa(memoria);
+        //ma.actualizaMapa(memoria);
         MovimientoAgenteWrapper maw = new MovimientoAgenteWrapper(identificador, direcciones[direccionActual]);
         return maw;
         //return direcciones[direccionActual];

@@ -91,6 +91,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
     public boolean simulacion;
     private Thread[] controlThreads = new Thread[4];
     private Control[] controles = new Control[4];
+    private int posicionLlegada = 0;
     private boolean avaricioso;
     //private int posicionAgente[] = new int[2];
     //private PosicionAgente posicionesInicialesAgentes[] = new PosicionAgente[4];
@@ -622,8 +623,16 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         return velocidad;
     }
     
-    public void salir(int identificador, int tesoros){
-
+    public synchronized void salir(int identificador, int tesoros){
+        int[] posicionInicial = posicionesAgentes[identificador].getPosicionInicial();
+        matrizCuadros[posicionInicial[0]][posicionInicial[1]].setAgente(false, "");
+        if(getAvaricioso()){
+            //poner el número de tesoros en la casilla de salida del agente
+        } else {
+            posicionLlegada += 1;
+            //poner el orden de llegada
+        }
+        repaint();
     }        
 
     @Override
