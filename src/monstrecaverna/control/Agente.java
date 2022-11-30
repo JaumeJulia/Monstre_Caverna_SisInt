@@ -49,10 +49,16 @@ public class Agente {
     private Casilla[] reconocerEntorno(){
         System.out.println("Iba hacia el:" + direcciones[direccionActual].toString());
         Casilla[] entorno = new Casilla[4];
+        int[] posicionesDescubiertas = new int[8];
+        int indice = 0;
         rotar(-rotacion);
         for(int i = 0 ; i < 4 ; i++){
             System.out.println("Miro al:" + direcciones[direccionActual].toString());
             entorno[i] = memoria.getCasilla(posicionActual, direcciones[direccionActual]);
+            posicionesDescubiertas[indice] = posicionActual[0] + direcciones[direccionActual].X;
+            indice++;
+            posicionesDescubiertas[indice] = posicionActual[1] + direcciones[direccionActual].Y;
+            indice++;
             System.out.println("Posicion actual del agente: " + Arrays.toString(posicionActual));
             int[] casillaCercana = {posicionActual[0] + direcciones[direccionActual].X, posicionActual[1] + direcciones[direccionActual].Y};
             System.out.println("Investigo la casilla " + Arrays.toString(casillaCercana));
@@ -72,7 +78,7 @@ public class Agente {
             deduccionCasillasAdyacentes[1] = estadoCasillaActual[0]; //hay hedor
             deduccionCasillasAdyacentes[2] = estadoCasillaActual[1]; //hay brisa
         }
-        memoria.defineEntorno(entorno, deduccionCasillasAdyacentes);
+        memoria.defineEntorno(entorno, deduccionCasillasAdyacentes, posicionesDescubiertas);
         return entorno;        
     }
     

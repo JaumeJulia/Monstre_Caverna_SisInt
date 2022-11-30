@@ -14,14 +14,16 @@ import java.util.HashMap;
  */
 public class Memoria {
     
-    public HashMap<Integer, HashMap> memoria = new HashMap<>(); //No, no puede ser final, netbeans es estúpido. Si fuese final, no podriamos ampliar el hashmap nunca
+    private HashMap<Integer, HashMap> memoria = new HashMap<>(); //No, no puede ser final, netbeans es estúpido. Si fuese final, no podriamos ampliar el hashmap nunca
+    private MapaAgente mapaAgente;
     
     public Memoria(int[] posicion){
         Casilla casilla = ampliaMemoria(posicion);
         casilla.setSegura();
+        mapaAgente = new MapaAgente();
     }
     
-    public void defineEntorno(Casilla[] entorno, boolean[] estado){ //define el nivel de peligrosidad de las casillas de su entorno basandose en la información extraída de la casilla que está ocupando
+    public void defineEntorno(Casilla[] entorno, boolean[] estado, int[] posicionesDescubiertas){ //define el nivel de peligrosidad de las casillas de su entorno basandose en la información extraída de la casilla que está ocupando
         if(estado[0]){ //La casilla ocupada es totalmente SEGURA
             for(Casilla casilla : entorno){
                 casilla.setSegura();
@@ -51,6 +53,7 @@ public class Memoria {
                 }
             }
         }
+        mapaAgente.actualizaMapa(entorno, posicionesDescubiertas);
     }
     
     public void recuerda(int[] posicionActual, Direcciones direccion){ //Recuerda el camino SEGURO de vuelta
