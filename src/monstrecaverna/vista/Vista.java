@@ -119,11 +119,6 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        ventanaMapa.setPreferredSize(new Dimension((int) 512, (int) 532));
-        ventanaMapa.pack();
-        ventanaMapa.setLocationRelativeTo(null);
-        ventanaMapa.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
     }
 
     private JPanel panelOpcionesRecinto() {
@@ -540,6 +535,20 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                     //setAgente(0, 1, 1);
                 }
 
+                if (sliderCantidadAgentes.getValue() == 2) {
+                    ventanaMapa.setPreferredSize(new Dimension((int) 512 * 2, (int) 532));
+                    ventanaMapa.setLayout(new GridLayout(1, 2));
+
+                } else if (sliderCantidadAgentes.getValue() >= 3) {
+                    ventanaMapa.setPreferredSize(new Dimension((int) 512 * 2, (int) 532 * 2));
+                    ventanaMapa.setLayout(new GridLayout(2, 2));
+                } else {
+                    ventanaMapa.setPreferredSize(new Dimension((int) 512, (int) 532));
+                }
+                ventanaMapa.pack();
+                ventanaMapa.setLocationRelativeTo(null);
+                ventanaMapa.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                
                 for (int i = 0; i < sliderCantidadAgentes.getValue(); i++) {
                     switch (i) {
                         case 0:
@@ -559,6 +568,7 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
                     }
                 }
             }
+            
             //System.out.println("cantidad agentes: " + cantidadAgentes);
 
             repaint();
