@@ -612,15 +612,35 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         matrizCuadros[i][j].setAbismo(b);
         if (i < matrizCuadros[j].length - 2) {
             matrizCuadros[i + 1][j].setBrisa(b);
+            if(matrizCuadros[i + 1][j].isTesoro()){
+                matrizCuadros[i + 1][j].setResplandor(true);
+            }else if(matrizCuadros[i + 1][j].isHedor() && !b){
+                matrizCuadros[i + 1][j].setHedor(true);
+            }
         }
         if (j < matrizCuadros[j].length - 2) {
             matrizCuadros[i][j + 1].setBrisa(b);
+            if(matrizCuadros[i][j + 1].isTesoro()){
+                matrizCuadros[i][j + 1].setResplandor(true);
+            }else if(matrizCuadros[i][j + 1].isHedor() && !b){
+                matrizCuadros[i][j + 1].setHedor(true);
+            }
         }
         if ((i - 1) > 0) {
             matrizCuadros[i - 1][j].setBrisa(b);
+            if(matrizCuadros[i - 1][j].isTesoro()){
+                matrizCuadros[i - 1][j].setResplandor(true);
+            }else if(matrizCuadros[i - 1][j].isHedor() && !b){
+                matrizCuadros[i - 1][j].setHedor(true);
+            }
         }
         if ((j - 1) > 0) {
             matrizCuadros[i][j - 1].setBrisa(b);
+            if(matrizCuadros[i][j - 1].isTesoro()){
+                matrizCuadros[i][j - 1].setResplandor(true);
+            }else if(matrizCuadros[i][j - 1].isHedor() && !b){
+                matrizCuadros[i][j - 1].setHedor(true);
+            }
         }
     }
 
@@ -628,15 +648,35 @@ public class Vista extends JFrame implements ChangeListener, ComponentListener, 
         matrizCuadros[i][j].setMonstruo(b);
         if (i < matrizCuadros[j].length - 2) {
             matrizCuadros[i + 1][j].setHedor(b);
+            if(matrizCuadros[i + 1][j].isTesoro()){
+                matrizCuadros[i + 1][j].setResplandor(true);
+            }else if(matrizCuadros[i + 1][j].isBrisa()&& !b){
+                matrizCuadros[i + 1][j].setBrisa(true);
+            }
         }
         if (j < matrizCuadros[j].length - 2) {
             matrizCuadros[i][j + 1].setHedor(b);
+            if(matrizCuadros[i][j + 1].isTesoro()){
+                matrizCuadros[i][j + 1].setResplandor(true);
+            }else if(matrizCuadros[i][j + 1].isBrisa()&& !b){
+                matrizCuadros[i][j + 1].setBrisa(true);
+            }
         }
         if ((i - 1) > 0) {
             matrizCuadros[i - 1][j].setHedor(b);
+            if(matrizCuadros[i - 1][j].isTesoro()){
+                matrizCuadros[i - 1][j].setResplandor(true);
+            }else if(matrizCuadros[i - 1][j].isBrisa()&& !b){
+                matrizCuadros[i - 1][j].setBrisa(true);
+            }
         }
         if ((j - 1) > 0) {
             matrizCuadros[i][j - 1].setHedor(b);
+            if(matrizCuadros[i][j - 1].isTesoro()){
+                matrizCuadros[i][j - 1].setResplandor(true);
+            }else if(matrizCuadros[i][j - 1].isBrisa()&& !b){
+                matrizCuadros[i][j - 1].setBrisa(true);
+            }
         }
     }
 
